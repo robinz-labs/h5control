@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Thermometer</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var thermometer1 = new Thermometer();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		thermometer1.setup(unit, 9, ThermometerModel.DHT11);
+
+		setInterval( function() {
+			thermometer1.getValue();
+		}, 500);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	thermometer1.whenGetValue = function(temperature, humidity) {
+		document.getElementById("status").innerHTML =
+				"temperature: " + temperature + "&deg;C &nbsp; " +
+				"humidity: " + humidity + "%";
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Thermometer Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Temperature and Humidity Measuring with DHT11 (pin 9)</h2>
+
+<p><img src="images/thermometer_1.png" width="640" height="480" /></p>
+<pre>
+var thermometer1 = new Thermometer();
+
+// set up a thermometer
+thermometer1.setup(
+	1,                      // unit 1
+	9,                      // pin 9
+	ThermometerModel.DHT11  // model
+);
+
+// measure the temperature and humidity
+thermometer1.whenGetValue = function(temperature, humidity) {
+	document.getElementById("status").innerHTML = "temperature: " + temperature + "&deg;C " + "humidity: " + humidity + "%";
+};
+thermometer1.getValue();
+</pre>
+<p>
+	Call function getValue() to measure the temperature and humidity. <br/>
+	The measured value in degrees Celsius and percentage will be obtained in callback whenGetValue().
+</p>
+
+<p>&nbsp;</p>
+
+<h1>Thermometer Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">Thermometer</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin, <i><s>model</s></i>)</p>
+<p class="itemDesc">
+	initialize a thermometer object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	optional parameter <b>model</b> can be set to ThermometerModel.DHT11 or ThermometerModel.DHT22, DHT11 is the default model.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to measure temperature and humidity, an event callback whenGetValue() will be received later.<br/>
+	return value: an associative array with two keys, temperature and humidity.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenGetValue(temperature, humidity)</p>
+<p class="itemDesc">
+	receive the callback to get the measured <b>temperature</b> and the <b>humidity</b> after called function getValue().
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">ThermometerModel</p>
+<p class="itemDesc">
+	<b>ThermometerModel.DHT11</b><br/>uses model DHT11<br/>
+	<b>ThermometerModel.DHT22</b><br/>uses model DHT21, DHT22, DHT33 or DHT44
+</p>
+
+<p>&nbsp;</p>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Getting Started</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var led = new DigitalOut();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenDisconnect = function() {
+		document.getElementById("status").innerHTML = "system connection lost";
+	};
+
+	h5control.whenUnitReady = function(unitId) {
+		led.setup(unitId, 13);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	led.whenGetValue = function(value) {
+		alert("LED is " + (value ? "ON" : "OFF"));
+	};
+
+	led.whenSetValue = function(value) {
+		document.getElementById("status").innerHTML = "LED is set to " + (value ? "ON" : "OFF");
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Getting Started with h5control</h1>
+
+<div id="status">starting...</div>
+
+<p>&nbsp;</p>
+
+<h2>What's h5control ?</h2>
+
+<p>h5control is a way to create your own robotics / IoT applications using HTML5.</p>
+<ul>
+	<li>Never need MCU programming for hardware.</li>
+	<li>Easy and fast programming only using HTML5/JavaScript for all.</li>
+	<li>Easy debugging with Web Inspector as same as the way for a common web app.</li>
+	<li>Your IoT apps will run on mobile phones, pads or desktop computers.</li>
+	<li>Your IoT apps will connect your IoT hardware via USB or Bluetooth.</li>
+	<li>Your IoT apps will contain control logic and user interface all made with HTML5.</li>
+</ul>
+<p><img src="images/h5control.png" width="600" height="350" /></p>
+
+<p>&nbsp;</p>
+
+<h2>Before your programming</h2>
+<ul>
+	<li>Get an Arduino that is ready for h5control ( <a href="../../h5control%20device/README.txt">info</a> ).</li>
+	<li>Install h5control service to your computer ( <a href="../../h5control%20service/README.txt">info</a> ).</li>
+	<!--<li>Install h5control app to your iOS or Android mobile device.</li>-->
+	<li>Connect the Arduino to your computer through USB or Bluetooth.</li>
+	<li>Run h5control service program on your computer.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2>Make your first h5control app</h2>
+<p>Create a web page file contains HTML code as below, and copy file h5control.js to the same directory of your html file. <br>
+Open it in your web browser ( the latest version of Chrome, Firefox, Safari, Internet Explorer or Edge is recommended ).</p>
+
+<pre>
+&lt;!DOCTYPE&#32;html&gt;<br>&lt;html&#32;xmlns="http://www.w3.org/1999/xhtml"&gt;<br>&lt;head&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&#32;src="h5control.js"&gt;&lt;/script&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&gt;
+<br>&#32;&#32;&#32;&#32;&#32;&#32;var&#32;led&#32;=&#32;new&#32;DigitalOut();
+<br>&#32;&#32;&#32;&#32;&#32;&#32;window.onload&#32;=&#32;function()&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h5control.setup();<br>&#32;&#32;&#32;&#32;&#32;&#32;};
+<br>&#32;&#32;&#32;&#32;&#32;&#32;h5control.whenConnect&#32;=&#32;function()&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h5control.resetAll();<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br><br>&#32;&#32;&#32;&#32;&#32;&#32;h5control.whenUnitReady&#32;=&#32;function(unitId)&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;led.setup(unitId,&#32;13);<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br><br>&#32;&#32;&#32;&#32;&#32;&#32;led.whenGetValue&#32;=&#32;function(value)&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;alert("LED&#32;is&#32;"&#32;+&#32;(value&#32;?&#32;"ON"&#32;:&#32;"OFF"));<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br>&#32;&#32;&#32;&lt;/script&gt;<br>&lt;/head&gt;<br><br>&lt;body&gt;<br>&lt;p&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;on" onclick="led.setValue(1);"&#32;/&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;off" onclick="led.setValue(0);"&#32;/&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;state&#32;?" onclick="led.getValue();"&#32;/&gt;<br>&lt;/p&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;
+
+</pre>
+
+<p>
+	Now, please follow all steps as below:
+</p>
+<ol>
+	<li>Run h5control Service program on your computer.</li>
+	<li>Connect your h5control-ready Arduino to your computer through USB.</li>
+	<li>Open the web page in your web browser.</li>
+</ol>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>
+Click buttons here for a live testing ......
+</p>
+<p>
+	<input type="button" value="led on"
+		   onclick="led.setValue(1);" />
+	<input type="button" value="led off"
+		   onclick="led.setValue(0);" />
+	<input type="button" value="led state ?"
+		   onclick="led.getValue();" />
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

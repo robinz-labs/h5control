@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Ultrasonic Ranger</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var ultrasonic1 = new UltrasonicRanger();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		ultrasonic1.setup(unit, 11, 10);
+
+		setInterval( function() {
+			ultrasonic1.getValue();
+		}, 250);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	ultrasonic1.whenGetValue = function(value) {
+		document.getElementById("status").innerHTML = "measured distance is " + value + " mm";
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Ultrasonic Ranger Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Distance Measuring with A HC-SR04 Ultrasonic Ranger (pin 11, pin 10)</h2>
+
+<p><img src="images/ultrasonic_ranger_1.png" width="640" height="640" /></p>
+<pre>
+var ultrasonic1 = new UltrasonicRanger();
+
+// set up an ultrasonic ranger
+ultrasonic1.setup(
+	1,   // unit 1
+	11,  // pin 11 - trig (output)
+	10   // pin 10 - echo (input)
+);
+
+// measure the distance
+ultrasonic1.whenGetValue = function(value) {
+	document.getElementById("status").innerHTML = "measured distance is " + value + " cm";
+};
+ultrasonic1.getValue();
+
+</pre>
+<p>
+	Call function getValue() to measure the distance between the ultrasonic ranger and the object ahead. <br/>
+	The measured distance value in centimeters will be obtained in callback whenGetValue().
+</p>
+
+<p>&nbsp;</p>
+<h1>Ultrasonic Ranger Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">UltrasonicRanger</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin1, pin2)</p>
+<p class="itemDesc">
+	initialize an ultrasonic ranger object with specified TRIG and ECHO pins (<b>pin1</b> and <b>pin2</b>) on a specified <b>unit</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to measure the distance by ultrasonic ranging, an event callback whenGetValue() will be received later.<br/>
+	return value: the distance value in centimeters.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenGetValue(value)</p>
+<p class="itemDesc">
+	receive the callback to get the measured distance <b>value</b> after called function getValue().
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

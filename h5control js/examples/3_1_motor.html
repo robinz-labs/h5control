@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - DC Motor</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var motor1 = new Motor();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		motor1.setup(unit, 10, 11);
+		// motor1.setup(unit, 10, 11, MotorMode.PWM_DIR);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	motor1.whenSetPower = function(power) {
+		document.getElementById("status").innerHTML = "present motor power is set to " + Math.round(power/0xff*100) + "%";
+	};
+
+	motor1.whenGetPower = function(power) {
+		alert("present motor power is " + Math.round(power/0xff*100) + "% .");
+	};
+
+</script>
+</head>
+
+<body>
+<h1>DC Motor Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control DC Motor (pin 10, pin 11)</h2>
+<p>
+	MOTOR POWER: <br/>
+	<input type="button" value="-100%"
+		   onclick="motor1.setPower(-255);" />
+	<input type="button" value="-50%"
+		   onclick="motor1.setPower(-128);" />
+	<input type="button" value="-25%"
+		   onclick="motor1.setPower(-64);" />
+	<input type="button" value="stop"
+		   onclick="motor1.setPower(0);" />
+	<input type="button" value="+25%"
+		   onclick="motor1.setPower(64);" />
+	<input type="button" value="+50%"
+		   onclick="motor1.setPower(128);" />
+	<input type="button" value="+100%"
+		   onclick="motor1.setPower(255);" />
+	<br/><br/>
+	<input type="button" value="present motor power ?"
+		   onclick="motor1.getPower();" />
+</p>
+<p><img src="images/motor_1.png" width="640" height="550" /></p>
+<pre>
+var motor1 = new Motor();
+
+// set up a motor wired with 2 pins (pin 10, 11) on unit 1
+motor1.setup(1, 10, 11);
+
+motor1.setPower(255);  // rotate forward with 100% power
+motor1.setPower(127);  // rotate forward with 50% power
+motor1.setPower(0);    // stop
+motor1.setPower(-127); // rotate reverse with 50% power
+motor1.setPower(-255); // rotate reverse with 100% power
+
+// get current motor power
+motor1.whenGetPower = function(power) {
+	alert("present motor power is " + Math.round(power/0xff*100) + "% .");
+};
+motor1.getPower();
+</pre>
+<p>
+	The power value can be set for controlling the motor rotating speed and direction.<br/>
+	The allowed power value can range between -255 and 255, and the motor stops when power is zero.
+</p>
+
+<p>&nbsp;</p>
+<p><img src="images/motor_2.png" width="640" height="550" /></p>
+<pre>
+var motor1 = new Motor();
+
+// set up a motor wired with PWM and DIR pins (pin 10 and pin 11) on unit 1
+motor1.setup(
+	1,                  // unit 1
+	10,                 // pwm pin
+	11,                 // dir pin
+	MotorMode.PWM_DIR   // motor mode
+);
+</pre>
+<p>
+	If your motor is driven with PWM and DIR pins, the optional parameter <i>motor mode</i> must be set to MotorMode.PWM_DIR,<br/>
+	then set pin1 for PWM and set pin2 for DIR.
+</p>
+
+<p>&nbsp;</p>
+<h1>DC Motor Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">Motor</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin1, pin2, <i><s>mode</s></i>)</p>
+<p class="itemDesc">
+	initialize a motor object with two specified pins (<b>pin1</b> and <b>pin2</b>) on a specified <b>unit</b>.<br/>
+	optional parameter <b>mode</b> can be set to MotorMode.NORMAL (default) or MotorMode.PWM_DIR .<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setPower(power)</p>
+<p class="itemDesc">
+	set the power value for changing the motor rotating speed and direction.<br/>
+	the value of parameter <b>power</b> is a number between -255 to 255.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getPower()</p>
+<p class="itemDesc">
+	request to get the current power value of the motor, an event callback whenGetPower() will be received later.<br/>
+	return value: the motor power value, a number between -255 to 255.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenSetPower(power)</p>
+<p class="itemDesc">
+	receive the callback when the motor <b>power</b> is changed.
+</p>
+
+<p class="itemName">whenGetPower(power)</p>
+<p class="itemDesc">
+	receive the callback to get the current motor <b>power</b> after called function getPower().
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">MotorMode</p>
+<p class="itemDesc">
+	<b>NORMAL</b><br/>dc motor with two lines v+ and v- (default motor mode)<br/>
+	<b>PWM_DIR</b><br/>motor driven with PWM and DIR pins
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

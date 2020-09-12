@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - UART Serial</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	function str2bytes(str) {
+		var bytes = [];
+		for (var i = 0; i < str.length; ++i) {
+			bytes.push(str.charCodeAt(i));
+		}
+		return bytes;
+	}
+
+	function bytes2str(bytes) {
+		var str = "";
+		for (var i = 0; i < bytes.length; ++i) {
+			str += String.fromCharCode(parseInt(bytes[i]));
+		}
+		return str;
+	}
+
+	var serial1 = new UartSerial();
+	var serial2 = new UartSerial();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		serial1.setup(unit, 1, 115200, UartSerialConfig._8N1);
+		serial2.setup(unit, 2, 115200, UartSerialConfig._8N1);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	serial1.whenReceive = function(bytes) {
+		document.getElementById("textIn1").innerHTML += bytes2str(bytes);
+	};
+
+	serial2.whenReceive = function(bytes) {
+		document.getElementById("textIn2").innerHTML += bytes2str(bytes);
+	};
+
+</script>
+</head>
+
+<body>
+<h1>UART Serial Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Serial Communication between Two Ports (port 1, port 2)</h2>
+<p>
+	UART Serial 1:<br/>
+	<input type="text" id="textOut1" value="Hello, this is Tom! " />
+	<input type="button" value="send"
+		   onclick="serial1.send(str2bytes(document.getElementById('textOut1').value));" />
+	<br/>
+	RECEIVED: <span id="textIn1"></span>
+</p>
+<p>
+	UART Serial 2:<br/>
+	<input type="text" id="textOut2" value="Hi, this is Jerry! " />
+	<input type="button" value="send"
+		   onclick="serial2.send(str2bytes(document.getElementById('textOut2').value));" />
+	<br/>
+	RECEIVED: <span id="textIn2"></span>
+</p>
+
+<p><img src="images/uart_serial_1.png" width="640" height="400" /></p>
+<pre>
+var serial1 = new UartSerial();
+
+// set up a serial port
+serial1.setup(
+	1,                     // unit 1
+	1,                     // port 1
+	115200,                // baud rate
+	UartSerialConfig._8N1  // 8 data bits, 1 stop bit, none parity
+);
+
+// send bytes
+var str = document.getElementById('textOut1').value
+var bytes = str2bytes(str); // convert the string to a byte array
+serial1.send(bytes);
+
+// set the callback for receiving bytes
+serial1.whenReceive = function(bytes) {
+	var str = bytes2str(bytes); // convert the byte array to a string
+	document.getElementById("textIn1").innerHTML += str;
+};
+</pre>
+
+<p>&nbsp;</p>
+
+<h1>UART Serial Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">UartSerial</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, port, <i><s>baud</s></i>, <i><s>config</s></i>)</p>
+<p class="itemDesc">
+	initialize a serial object with a specified <b>port</b> on a specified <b>unit</b>.<br/>
+	optional parameter <b>baud</b> is for baudrate setting, the default rate is 9600 bps.<br/>
+	optional parameter <b>config</b> is for data bits, stop bits and parity settings, the defaults are 8 data bits, 1 stop bit, none parity.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">send(bytes)</p>
+<p class="itemDesc">
+	send data in parameter <b>bytes</b> that is a byte array.<br/>
+	return value: none
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenReceive(bytes)</p>
+<p class="itemDesc">
+	receive the callback when received the new incoming data carried in parameter <b>bytes</b> that is a byte array.
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">UartSerialConfig</p>
+<p class="itemDesc">
+	<b>_5N1</b> 5 data bits, 1 stop bit, none parity<br/>
+	<b>_6N1</b> 6 data bits, 1 stop bit, none parity<br/>
+	<b>_7N1</b> 7 data bits, 1 stop bit, none parity<br/>
+	<b>_8N1</b> 8 data bits, 1 stop bit, none parity (defaults)<br/>
+	<b>_5N2</b> 5 data bits, 2 stop bits, none parity<br/>
+	<b>_6N2</b> 6 data bits, 2 stop bits, none parity<br/>
+	<b>_7N2</b> 7 data bits, 2 stop bits, none parity<br/>
+	<b>_8N2</b> 8 data bits, 2 stop bits, none parity<br/>
+	<b>_5E1</b> 5 data bits, 1 stop bit, even parity<br/>
+	<b>_6E1</b> 6 data bits, 1 stop bit, even parity<br/>
+	<b>_7E1</b> 7 data bits, 1 stop bit, even parity<br/>
+	<b>_8E1</b> 8 data bits, 1 stop bit, even parity<br/>
+	<b>_5E2</b> 5 data bits, 2 stop bits, even parity<br/>
+	<b>_6E2</b> 6 data bits, 2 stop bits, even parity<br/>
+	<b>_7E2</b> 7 data bits, 2 stop bits, even parity<br/>
+	<b>_8E2</b> 8 data bits, 2 stop bits, even parity<br/>
+	<b>_5O1</b> 5 data bits, 1 stop bit, odd parity<br/>
+	<b>_6O1</b> 6 data bits, 1 stop bit, odd parity<br/>
+	<b>_7O1</b> 7 data bits, 1 stop bit, odd parity<br/>
+	<b>_8O1</b> 8 data bits, 1 stop bit, odd parity<br/>
+	<b>_5O2</b> 5 data bits, 2 stop bits, odd parity<br/>
+	<b>_6O2</b> 6 data bits, 2 stop bits, odd parity<br/>
+	<b>_7O2</b> 7 data bits, 2 stop bits, odd parity<br/>
+	<b>_8O2</b> 8 data bits, 2 stop bits, odd parity
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

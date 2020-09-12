@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Encoder</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var encoder1 = new Encoder();
+	var encoder2 = new Encoder();
+	var motor1 = new Motor();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		encoder1.setup(unit, 2, 3, DigitalInResistor.INTERNAL_PULLUP, 2000);
+		encoder2.setup(unit, 4, 5);
+		motor1.setup(unit, 10, 11);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	encoder1.whenGetValue = function(value) {
+		alert("encoder counter value is " + value);
+	};
+
+	encoder1.whenStartMonitor = function() {
+		document.getElementById("status").innerHTML = "encoder monitor is started";
+	};
+
+	encoder1.whenStopMonitor = function() {
+		document.getElementById("status").innerHTML = "encoder monitor is stopped";
+	};
+
+	encoder1.whenUpdateValue = function(value) {
+		document.getElementById("status").innerHTML = "encoder counter value is " + value;
+	};
+
+	encoder2.whenGetValue = function(value) {
+		alert("encoder counter value is " + value);
+	};
+
+	encoder2.whenStartMonitor = function() {
+		document.getElementById("status").innerHTML = "encoder monitor is started";
+	};
+
+	encoder2.whenStopMonitor = function() {
+		document.getElementById("status").innerHTML = "encoder monitor is stopped";
+	};
+
+	encoder2.whenUpdateValue = function(value) {
+		document.getElementById("status").innerHTML = "encoder counter value is " + value;
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Encoder Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Encoder for Rotary Knob Positioning (pin 2, pin 3)</h2>
+<p>
+	<input type="button" value="get counter value"
+		   onclick="encoder1.getValue();" />
+	<input type="button" value="start monitor"
+		   onclick="encoder1.startMonitor();" />
+	<input type="button" value="stop monitor"
+		   onclick="encoder1.stopMonitor();" />
+	<input type="button" value="reset counter"
+		   onclick="encoder1.setValue(0);" />
+</p>
+<p><img src="images/encoder_1.png" width="640" height="450" /></p>
+<pre>
+var encoder1 = new Encoder();
+
+// set up an encoder
+encoder1.setup(
+	1,                                 // unit 1
+	2,                                 // pin 2 to encoder signal A
+	3,                                 // pin 3 to encoder signal B
+	DigitalInResistor.INTERNAL_PULLUP, // enable internal pull-up resistor
+	2000                               // sampling interval is 2000 microseconds
+);
+
+// get the present encoder counter value
+encoder1.whenGetValue = function(value) {
+	alert("encoder counter value is " + value);
+};
+encoder1.getValue();
+
+// start a monitor to detect the encoder counter value updating
+encoder1.whenUpdateValue = function(value) {
+	document.getElementById("status").innerHTML = "encoder counter value is " + value;
+};
+encoder1.startMonitor();
+
+// reset encoder counter value
+encoder1.setValue(0);
+</pre>
+<p>
+	<b>Encoder Counter</b><br/>
+	Encoder counts pulses from quadrature encoded A/B signals,
+	which are commonly available from rotary knobs,
+	motor or shaft sensors and other position sensors.
+	The encoder object maintains a 24-bit counter for the positioning.
+	The count value can range between -16777215 (-0xffffff) and 16777215 (0xffffff).
+</p>
+
+<p>&nbsp;</p>
+
+<h2> Experiment 2 - Encoder for Motor Rotation Positioning (pin 4, pin 5)</h2>
+<p>
+	ENCODER: <br/>
+	<input type="button" value="get counter value"
+		   onclick="encoder2.getValue();" />
+	<input type="button" value="start monitor (high sensitive)"
+		   onclick="encoder2.startMonitor();" />
+	<input type="button" value="start monitor (low sensitive)"
+		   onclick="encoder2.startMonitor(100);" />
+	<input type="button" value="stop monitor"
+		   onclick="encoder2.stopMonitor();" />
+	<input type="button" value="reset counter"
+		   onclick="encoder2.setValue(0);" />
+	<br/><br/>
+	MOTOR: <br/>
+	<input type="button" value="-100%"
+		   onclick="motor1.setPower(-255);" />
+	<input type="button" value="-50%"
+		   onclick="motor1.setPower(-128);" />
+	<input type="button" value="-25%"
+		   onclick="motor1.setPower(-64);" />
+	<input type="button" value="stop"
+		   onclick="motor1.setPower(0);" />
+	<input type="button" value="+25%"
+		   onclick="motor1.setPower(64);" />
+	<input type="button" value="+50%"
+		   onclick="motor1.setPower(128);" />
+	<input type="button" value="+100%"
+		   onclick="motor1.setPower(255);" />
+</p>
+<p><img src="images/encoder_2.png" width="640" height="530" /></p>
+<pre>
+var encoder2 = new Encoder();
+
+// set up an encoder
+encoder2.setup(
+	1,  // unit 1
+	4,  // pin 4 to encoder signal A
+	5   // pin 5 to encoder signal B
+);
+
+// start a high sensitive monitor to detect the encoder counter value updating
+// with defaults (for the highest sensitivity)
+encoder2.startMonitor();
+
+// start a low sensitive monitor to detect the encoder counter value updating
+// the minimum value updating interval is 100 milliseconds
+encoder2.startMonitor(100);
+</pre>
+<p>
+	The optional parameter <i>updating interval</i> is the minimum interval time in milliseconds to emit the callback for the counter value updating.
+</p>
+
+<p>&nbsp;</p>
+
+<h1>Encoder Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">Encoder</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pinA, pinB, <i><s>resistor</s></i>, <i><s>samplingInterval</s></i>)</p>
+<p class="itemDesc">
+	initialize an encoder object with two specified pins of A/B signals (<b>pinA</b> and <b>pinB</b>) on a specified <b>unit</b>.<br/>
+	optional parameter <b>resistor</b> is the configuration for using external or internal pull-up resistor connections.<br/>
+	<b>samplingInterval</b> is the optional parameter for setting the frequency to read encoder A/B signals.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to get the present value of the encoder counter, an event callback whenGetValue() will be received later.<br/>
+	return value: the encoder counter value.
+</p>
+
+<p class="itemName">setValue(value)</p>
+<p class="itemDesc">
+	set a <b>value</b> to the encoder counter, reset the counter if set 0 to the parameter.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">startMonitor(<i><s>updatingInterval</s></i>)</p>
+<p class="itemDesc">
+	start a monitor to detect the encoder counter value updating.<br/>
+	parameter <b>updatingInterval</b> is in milliseconds.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">stopMonitor()</p>
+<p class="itemDesc">
+	stop the monitor to detect the encoder counter value updating<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful, or false otherwise.
+</p>
+
+<p class="itemName">whenGetValue(value)</p>
+<p class="itemDesc">
+	receive the callback to get the present encoder counter <b>value</b> after called function getValue().
+</p>
+
+<p class="itemName">whenSetValue(value)</p>
+<p class="itemDesc">
+	receive the callback when the encoder counter <b>value</b> is set using function setValue().
+</p>
+
+<p class="itemName">whenStartMonitor()</p>
+<p class="itemDesc">
+	receive the callback to confirm the monitor is started after called function startMonitor().
+</p>
+
+<p class="itemName">whenStopMonitor()</p>
+<p class="itemDesc">
+	receive the callback to confirm the monitor is stopped after called function startMonitor().
+</p>
+
+<p class="itemName">whenUpdateValue(value)</p>
+<p class="itemDesc">
+	receive the callback when the encoder counter <b>value</b> is updated after started the monitor.
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

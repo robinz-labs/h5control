@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Raw Messaging</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function(connections) {
+		document.getElementById("status").innerHTML = "found " + connections + " unit(s)";
+		h5control.resetAll(); // reset all units connected
+	}
+
+	h5control.whenDisconnect = function() {
+		document.getElementById("status").innerHTML = "system connection lost";
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		document.getElementById("status").innerHTML = "unit-" + unit + " is ready";
+
+		var led = new DigitalOut();
+		led.setup(unit, 13);
+	}
+
+	h5control.whenReceiveRawMessage = function(unit, msg) {
+		var message = "";
+		for (var n=0 ; n<msg.length ; n++) {
+			message += hexEncode(msg[n]) + " ";
+		}
+		document.getElementById("logs").innerHTML += "[unit-" + hexEncode(unit) + "] --> " + message + "<br/>";
+	};
+
+	h5control.whenSendRawMessage = function(unit, msg) {
+		var message = "";
+		for (var n=0 ; n<msg.length ; n++) {
+			message += hexEncode(msg[n]) + " ";
+		}
+		document.getElementById("logs").innerHTML += "[unit-" + hexEncode(unit) + "] <-- " + message + "<br/>";
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Raw Messaging Test</h1>
+
+<div id="status">starting...</div>
+
+<p>&nbsp;</p>
+
+<p>
+	<input type="button" value="reset unit"
+		   onclick="h5control.sendRawMessage(0xff, [0x00, 0x01, 0, 0, 0, 0, 0, 0]);" />
+	<input type="button" value="get unit version"
+		   onclick="h5control.sendRawMessage(0xff, [0x00, 0x02, 0, 0, 0, 0, 0, 0]);" />
+
+	&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<input type="text" value="1" id="unitID" />
+	<input type="button" value="set unit id"
+		   onclick="h5control.sendRawMessage(0xff, [0x00, 0x03, (document.getElementById('unitID').value)&0xff, 0, 0, 0, 0, 0]);" />
+
+	&nbsp;&nbsp;&nbsp;&nbsp;
+
+	<input type="button" value="led on"
+		   onclick="h5control.sendRawMessage(0xff, [0x02, 0x01, 0x0d, 0x01, 0, 0, 0, 0]);" />
+	<input type="button" value="led off"
+		   onclick="h5control.sendRawMessage(0xff, [0x02, 0x01, 0x0d, 0x00, 0, 0, 0, 0]);" />
+</p>
+
+
+<p>
+	<input type="button" value="clear log"
+		   onclick="document.getElementById('logs').innerHTML ='';" />
+</p>
+<pre id="logs"></pre>
+</body>
+</html>

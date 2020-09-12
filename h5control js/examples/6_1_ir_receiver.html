@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - IR Receiver</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var receiver1 = new IRReceiver();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		receiver1.setup(unit, 8);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	receiver1.whenReceive = function(bytes) {
+		document.getElementById("logs").innerHTML += bytes + "<br/>";
+		document.getElementById("status").innerHTML = "received data: " + bytes;
+	};
+
+</script>
+</head>
+
+<body>
+<h1>IR Receiver Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Receive Data from IR Receiver (port 8)</h2>
+<p>
+	Received Bytes:
+	&nbsp;&nbsp;
+	<input type="button" value="clear" onclick="document.getElementById('logs').innerHTML ='';" />
+</p>
+<pre id="logs"></pre>
+
+
+<p><img src="images/ir_receiver_1.png" width="640" height="480" /></p>
+<pre>
+var receiver1 = new IRReceiver();
+
+// set up an infrared receiver
+receiver1.setup(
+	1, // unit 1
+	8  // pin 8
+);
+
+// set the callback for receiving bytes
+receiver1.whenReceive = function(bytes) {
+	document.getElementById("status").innerHTML = "received data: " + bytes;
+};
+</pre>
+
+<p>&nbsp;</p>
+
+<h1>IR Receiver Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">IRReceiver</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize an infrared receiver object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenReceive(bytes)</p>
+<p class="itemDesc">
+	receive the callback when received the new incoming data carried in parameter <b>bytes</b> that is a byte array.
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Stepper</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var stepper1 = new Stepper();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		stepper1.setup(unit, 2, 3, 4, 5);
+
+		setInterval(function() {
+			stepper1.getPosition();
+		}, 500);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	stepper1.whenGetPosition = function(position) {
+		document.getElementById("status").innerHTML = "present stepper position is " + position;
+	};
+
+	stepper1.whenGetSpeed = function(speed) {
+		alert("present speed is " + speed + " steps per second.");
+	};
+
+	/*
+	stepper1.whenSetPosition = function(position) {
+		alert("present stepper position is set to " + position);
+	};
+
+	stepper1.whenSetSpeed = function(speed) {
+		alert("present speed is set to " + speed);
+	};
+
+	stepper1.whenStep = function(steps) {
+		alert("take " + steps + " steps");
+	};
+
+	stepper1.whenGoto = function(position) {
+		alert("step to position " + position);
+	};
+
+	stepper1.whenStop = function() {
+		alert("stop motor");
+	};
+	*/
+
+</script>
+</head>
+
+<body>
+<h1>Stepper Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control 4-pin Bipolar Stepper (pin 2, 3, 4, 5)</h2>
+<p>
+	TAKE STEPS: <br/>
+	<input type="button" value="-100 steps"
+		   onclick="stepper1.step(-100);" />
+	<input type="button" value="+100 steps"
+		   onclick="stepper1.step(100);" />
+	<input type="button" value="-20 steps"
+		   onclick="stepper1.step(-20);" />
+	<input type="button" value="+20 steps"
+		   onclick="stepper1.step(20);" />
+	<br/><br/>
+	ROTATE: <br/>
+	<input type="button" value="<< reverse"
+		   onclick="stepper1.goto(-0xffffff);" />
+	<input type="button" value="stop"
+		   onclick="stepper1.stop();" />
+	<input type="button" value="forward >>"
+		   onclick="stepper1.goto(0xffffff);" />
+	<br/><br/>
+	SET SPEED: <br/>
+	<input type="button" value="fast / 800 steps per second"
+		   onclick="stepper1.setSpeed(800);" />
+	<input type="button" value="normal / 100 steps per second"
+		   onclick="stepper1.setSpeed(100);" />
+	<input type="button" value="slow / 10 steps per second"
+		   onclick="stepper1.setSpeed(10);" />
+	<input type="button" value="present speed ?"
+		   onclick="stepper1.getSpeed();" />
+	<br/><br/>
+	STEP TO: <br/>
+	<input type="button" value="go to -1000"
+		   onclick="stepper1.goto(-1000);" />
+	<input type="button" value="go to -500"
+		   onclick="stepper1.goto(-500);" />
+	<input type="button" value="go to 0"
+		   onclick="stepper1.goto(0);" />
+	<input type="button" value="go to 500"
+		   onclick="stepper1.goto(500);" />
+	<input type="button" value="go to 1000"
+		   onclick="stepper1.goto(1000);" />
+	<input type="button" value="set zero position"
+		   onclick="stepper1.setPosition(0);" />
+	<br/><br/>
+
+</p>
+<p><img src="images/stepper_1.png" width="640" height="790" /></p>
+<pre>
+var stepper1 = new Stepper();
+
+// set up a stepper wired with 4 pins (pin 2,3,4,5) on unit 1
+stepper1.setup(1, 2, 3, 4, 5);
+
+// set speed
+stepper1.setSpeed(800);  // 800 steps per second
+
+// rotate by steps
+stepper1.step(100);      // take +100 steps
+stepper1.step(-100);     // take -100 steps
+
+// step to a specified position
+stepper1.goto(1000);     // go to position +1000
+stepper1.goto(-1000);    // to to position -1000
+
+// stop
+stepper1.stop();
+
+// get current stepper position
+stepper1.whenGetPosition = function(position) {
+	document.getElementById("status").innerHTML = "present stepper position is " + position;
+};
+stepper1.getPosition();
+
+// set current stepper position as a specific value
+stepper1.setPosition(0); // set zero position
+
+</pre>
+<p>
+	When the motor is running, the value of the stepper position will be updated by the steps rotated.
+	The initialized position is 0, the value will increase after rotating forward, or decrease after rotating reverse.
+	With a position counter maintained in the system, the allowed position value can range between -16777215 (-0xffffff)
+	and 16777215 (0xffffff).
+</p>
+
+<p>&nbsp;</p>
+<h1>Stepper Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">Stepper</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin1, pin2, pin3, pin4)</p>
+<p class="itemDesc">
+	initialize a stepper object with four specified pins (<b>pin1</b>, <b>pin2</b>, <b>pin3</b>, <b>pin4</b>) on a specified <b>unit</b>. <br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">step(steps)</p>
+<p class="itemDesc">
+	rotate the motor by the specified <b>steps</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">goto(position)</p>
+<p class="itemDesc">
+	set a number to the parameter as the target stepper <b>position</b>. The motor will rotate to the specified position.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">stop()</p>
+<p class="itemDesc">
+	stop to rotate the motor.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setSpeed(speed)</p>
+<p class="itemDesc">
+	set a number of steps per second to the parameter for changing the motor rotating <b>speed</b>,
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getSpeed()</p>
+<p class="itemDesc">
+	request to get the current speed value of the stepper, an event callback whenGetSpeed() will be received later.<br/>
+	return value: the speed value, a number of steps per second.
+</p>
+
+<p class="itemName">setPosition(position)</p>
+<p class="itemDesc">
+	set a number to the parameter as the current stepper <b>position</b>.
+	normally, the function is used for original zero position synchronizing in the motion control.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getPosition()</p>
+<p class="itemDesc">
+	request to get the current position of the stepper, an event callback whenGetPosition() will be received later.<br/>
+	return value: the stepper position value.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenStep(steps)</p>
+<p class="itemDesc">
+	receive the callback when the motor rotated by the specified <b>steps</b>.
+</p>
+
+<p class="itemName">whenGoto(position)</p>
+<p class="itemDesc">
+	receive the callback when the motor is going to the specified target <b>position</b>.
+</p>
+
+<p class="itemName">whenStop()</p>
+<p class="itemDesc">
+	receive the callback when stopped to rotate the motor.
+</p>
+
+<p class="itemName">whenSetSpeed(speed)</p>
+<p class="itemDesc">
+	receive the callback when the stepper <b>speed</b> is set.
+</p>
+
+<p class="itemName">whenGetSpeed(speed)</p>
+<p class="itemDesc">
+	receive the callback to to get the current <b>speed</b> value of the stepper after called function getSpeed().
+</p>
+
+<p class="itemName">whenSetPosition(position)</p>
+<p class="itemDesc">
+	receive the callback when the current stepper <b>position</b> is set.
+</p>
+
+<p class="itemName">whenGetPosition(position)</p>
+<p class="itemDesc">
+	receive the callback to to get the current stepper <b>position</b> after called function getPosition().
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Analog Out</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var led1 = new AnalogOut();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		led1.setup(unit, Arduino.DUE.DAC0);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	led1.whenGetValue = function(value) {
+		alert("analog value is " + value + " ( " + Math.round(value/0xffff*100) + "% LED brightness )");
+	};
+
+	led1.whenSetValue = function(value) {
+		document.getElementById("status").innerHTML = "analog output is set to " + value;
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Analog Out Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control LED Brightness with Analog Output (pin DAC0)</h2>
+<p>
+	<input type="button" value="output 0%"
+		   onclick="led1.setValue(0);" />
+	<input type="button" value="output 50%"
+		   onclick="led1.setValue(Math.round(0xffff*0.5));" />
+	<input type="button" value="output 75%"
+		   onclick="led1.setValue(Math.round(0xffff*0.75));" />
+	<input type="button" value="output 100%"
+		   onclick="led1.setValue(0xffff);" />
+	<input type="button" value="output value ?"
+		   onclick="led1.getValue();" />
+
+</p>
+<p><img src="images/analog_out_1.png" width="640" height="450" /></p>
+<pre>
+var led1 = new AnalogOut();
+
+// set up an analog output with pin DAC0 on unit 1
+led1.setup(1, Arduino.DUE.DAC0);
+
+led1.setValue(0);     // the analog output is set to 0, turn off the LED
+led1.setValue(32767); // the analog output is set to 32767, 50% LED brightness
+led1.setValue(65535); // the analog output is set to 65535, 100% LED brightness
+</pre>
+<p>
+	The analog output can be set to a 16-bit unsigned integer number.
+	In other word, the minimum analog value is 0, and the maximum analog value is 65535. <br/>
+	With h5control, only Arduino DUE board has two DAC pins that can be used for analog output.
+</p>
+
+<p>&nbsp;</p>
+
+<h1>Analog Out Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">AnalogOut</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize an analog output object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setValue(value)</p>
+<p class="itemDesc">
+	set a number between 0 to 65535 to parameter <b>value</b> for changing the voltage level of analog output signal.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to get the present voltage level of the analog output signal, an event callback whenGetValue() will be received later.<br/>
+	return value: the analog output value, a number between 0 to 65535
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenSetValue(value)</p>
+<p class="itemDesc">
+	receive the callback when analog output <b>value</b> has been set.
+</p>
+
+<p class="itemName">whenGetValue(value)</p>
+<p class="itemDesc">
+	receive the callback to get the present analog output <b>value</b> after called function getValue().
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">Arduino.DUE</p>
+<p class="itemDesc">
+	analog output pins on Arduino DUE board:<br/>
+	<b>DAC0</b><br/>
+	<b>DAC1</b>
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

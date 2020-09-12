@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - IR Transmitter</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var transmitter1 = new IRTransmitter();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		transmitter1.setup(unit, 9);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	transmitter1.whenSend = function(bytes) {
+		document.getElementById("status").innerHTML = "sent data: " + bytes;
+	};
+
+</script>
+</head>
+
+<body>
+<h1>IR Transmitter Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Send Data through IR Transmitter (port 9)</h2>
+<p>
+	<input type="button" value="send 00 00 00 00" onclick="transmitter1.send([0x00, 0x00, 0x00, 0x00]);" />
+	<input type="button" value="send FF FF FF FF" onclick="transmitter1.send([0xff, 0xff, 0xff, 0xff]);" />
+	<input type="button" value="send 01 02 03 04" onclick="transmitter1.send([0x01, 0x02, 0x03, 0x04]);" />
+	<input type="button" value="send F1 F2 F3 F4" onclick="transmitter1.send([0xf1, 0xf2, 0xf3, 0xf4]);" />
+</p>
+
+<p><img src="images/ir_transmitter_1.png" width="640" height="480" /></p>
+<pre>
+var transmitter1 = new IRTransmitter();
+
+// set up an infrared transmitter
+transmitter1.setup(
+	1, // unit 1
+	9  // pin 9
+);
+
+// send bytes
+var bytes = [ 0x01, 0x02, 0x03, 0x04 ];
+transmitter1.send(bytes);
+</pre>
+<p>
+	The IR transmitter data pin must be wired to pin 9 on an Arduino MEGA board,
+	or pin 3 on an Arduino UNO board. <br/>
+
+	(please see file IRremoteInt.h for more details)
+</p>
+
+<p>&nbsp;</p>
+
+<h1>IR Transmitter Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">IRTransmitter</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize an infrared transmitter object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">send(bytes)</p>
+<p class="itemDesc">
+	send data in parameter <b>bytes</b> that is a byte array. the length of the data must be or less than four bytes.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenSend(bytes)</p>
+<p class="itemDesc">
+	receive the callback when sent the data after called function send().
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - RGB LED Strip</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var strip1 = new LEDStrip();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		strip1.setup(unit, 10, 4);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	strip1.whenShowRGB = function(index, red, green, blue) {
+		document.getElementById("status").innerHTML = "LED #" + index + " color is set to ( " + red + ", " + green + ", " + blue + " )";
+	};
+
+	/*
+	strip1.whenSetRGB = function(index, red, green, blue) {
+		document.getElementById("status").innerHTML = "LED #" + index + " color is set to ( " + red + ", " + green + ", " + blue + " )";
+	};
+	*/
+
+	var ledFadingTimer = null;
+	var ledFadingOn = true;
+	var ledRed = 0;
+	var ledGreen = 0;
+	var ledBlue = 0;
+	function startLedFading() {
+		if (ledFadingTimer == null) {
+			ledFadingTimer = setInterval(function() {
+
+				if (ledFadingOn) {
+					if (ledRed < 150) {
+						ledRed+=5;
+					} else if (ledGreen < 250) {
+						ledGreen+=5;
+					} else if (ledBlue < 150) {
+						ledBlue+=5;
+					} else {
+						ledFadingOn = false;
+					}
+				} else {
+					if (ledRed > 0) {
+						ledRed-=5;
+					} else if (ledGreen > 0) {
+						ledGreen-=5;
+					} else if (ledBlue > 0) {
+						ledBlue-=5;
+					} else {
+						ledFadingOn = true;
+					}
+				}
+
+				for (var n=0; n<4 ; n++) {
+					strip1.setRGB(n, ledRed, ledGreen, ledBlue);
+				}
+				strip1.show();
+			}, 50);
+		}
+	}
+	function stopLedFading() {
+		if (ledFadingTimer != null) {
+			clearInterval(ledFadingTimer);
+			ledFadingTimer = null;
+		}
+
+		setTimeout( function() {
+			for (var n=0; n<4 ; n++) {
+				strip1.setRGB(n, 0, 0, 0);
+			}
+			strip1.show();
+		}, 100);
+	}
+
+</script>
+</head>
+
+<body>
+<h1>RGB LED Strip Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control WS2812 LED Strip (pin 10)</h2>
+<p>
+	LED #0: &nbsp;
+	<input type="button" value="red"
+		   onclick="strip1.showRGB(0, 255, 0, 0)" />
+	<input type="button" value="green"
+		   onclick="strip1.showRGB(0, 0, 255, 0)" />
+	<input type="button" value="blue"
+		   onclick="strip1.showRGB(0, 0, 0, 255)" />
+	<input type="button" value="cyan"
+		   onclick="strip1.showRGB(0, 0, 255, 255)" />
+	<input type="button" value="magenta"
+		   onclick="strip1.showRGB(0, 255, 0, 255)" />
+	<input type="button" value="yellow"
+		   onclick="strip1.showRGB(0, 255, 255, 0)" />
+	<input type="button" value="white"
+		   onclick="strip1.showRGB(0, 255, 255, 255)" />
+	<input type="button" value="off"
+		   onclick="strip1.showRGB(0, 0, 0, 0)" />
+	<br/>
+	LED #1: &nbsp;
+	<input type="button" value="red"
+		   onclick="strip1.showRGB(1, 255, 0, 0)" />
+	<input type="button" value="green"
+		   onclick="strip1.showRGB(1, 0, 255, 0)" />
+	<input type="button" value="blue"
+		   onclick="strip1.showRGB(1, 0, 0, 255)" />
+	<input type="button" value="cyan"
+		   onclick="strip1.showRGB(1, 0, 255, 255)" />
+	<input type="button" value="magenta"
+		   onclick="strip1.showRGB(1, 255, 0, 255)" />
+	<input type="button" value="yellow"
+		   onclick="strip1.showRGB(1, 255, 255, 0)" />
+	<input type="button" value="white"
+		   onclick="strip1.showRGB(1, 255, 255, 255)" />
+	<input type="button" value="off"
+		   onclick="strip1.showRGB(1, 0, 0, 0)" />
+	<br/>
+	LED #2: &nbsp;
+	<input type="button" value="red"
+		   onclick="strip1.showRGB(2, 255, 0, 0)" />
+	<input type="button" value="green"
+		   onclick="strip1.showRGB(2, 0, 255, 0)" />
+	<input type="button" value="blue"
+		   onclick="strip1.showRGB(2, 0, 0, 255)" />
+	<input type="button" value="cyan"
+		   onclick="strip1.showRGB(2, 0, 255, 255)" />
+	<input type="button" value="magenta"
+		   onclick="strip1.showRGB(2, 255, 0, 255)" />
+	<input type="button" value="yellow"
+		   onclick="strip1.showRGB(2, 255, 255, 0)" />
+	<input type="button" value="white"
+		   onclick="strip1.showRGB(2, 255, 255, 255)" />
+	<input type="button" value="off"
+		   onclick="strip1.showRGB(2, 0, 0, 0)" />
+	<br/>
+	LED #3: &nbsp;
+	<input type="button" value="red"
+		   onclick="strip1.showRGB(3, 255, 0, 0)" />
+	<input type="button" value="green"
+		   onclick="strip1.showRGB(3, 0, 255, 0)" />
+	<input type="button" value="blue"
+		   onclick="strip1.showRGB(3, 0, 0, 255)" />
+	<input type="button" value="cyan"
+		   onclick="strip1.showRGB(3, 0, 255, 255)" />
+	<input type="button" value="magenta"
+		   onclick="strip1.showRGB(3, 255, 0, 255)" />
+	<input type="button" value="yellow"
+		   onclick="strip1.showRGB(3, 255, 255, 0)" />
+	<input type="button" value="white"
+		   onclick="strip1.showRGB(3, 255, 255, 255)" />
+	<input type="button" value="off"
+		   onclick="strip1.showRGB(3, 0, 0, 0)" />
+	<br/><br/>
+	FADING FX:<br/>
+	<input type="button" value="start show"
+		   onclick="startLedFading()" />
+	<input type="button" value="stop show"
+		   onclick="stopLedFading()" />
+</p>
+<p><img src="images/led_strip_1.png" width="640" height="550" /></p>
+<pre>
+var strip1 = new LEDStrip();
+
+// set up a led strip
+strip1.setup(
+	1,   // unit 1
+	10,  // pin 10
+	4    // total LED number on the strip
+);
+
+strip1.showRGB(0, 255, 0, 0);     // led #0 color is set to red
+strip1.showRGB(1, 255, 255, 255); // led #1 color is set to white
+strip1.showRGB(2, 0, 0, 0);       // led #2 is set to off
+
+strip1.setRGB(0, 255, 0, 0);      // led #0 color is set to red, but not refresh instantly
+strip1.setRGB(1, 0, 255, 0);      // led #1 color is set to green, but not refresh instantly
+strip1.setRGB(2, 0, 0, 255);      // led #2 color is set to blue, but not refresh instantly
+strip1.show();                    // refresh all led colors on the strip
+
+</pre>
+<p>
+	The red, green or blue value can be set for changing the LED color.
+	The allowed single red, green or blue value can range between 0 and 255.
+	And a combination of these three can give 16,777,215 colors to RGB colored lights.
+</p>
+<p>
+	Function showRGB() will change the red-green-blue color setting of a specified LED on the strip
+	and also refresh the LED representation instantly.
+	When need to call showRGB() for couples of LEDs in a procedure,
+	each showRGB() function call will bring a force LED display updating as long as modified the LED color setting.
+	We noticed this method has to take some time for the duplicate refreshing.
+	The alternative is using functions setRGB() and show() separately.
+	We could call setRGB() for all LEDs whose colors need be modified first.
+	And just call function show() one time after all LED color settings are modified using setRGB().
+	The new method is much more efficient to refresh LED strip display "frame by frame".
+</p>
+
+<p>&nbsp;</p>
+<h1>RGB LED Strip Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">LEDStrip</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin, <i><s>count</s></i>, <i><s>mode</s></i>)</p>
+<p class="itemDesc">
+	initialize a LED strip object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	optional parameter <b>count</b> is the total LED number on this strip.<br/>
+	optional parameter <b>mode</b> is the advanced configuration for the particular LED strip model with WS2812 chips
+	(the default value is LEDStripDataOrder.GRB + LEDStripDataStream.KHZ800).<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">showRGB(index, red, green, blue)</p>
+<p class="itemDesc">
+	set the RGB color value for a specified LED on the strip,
+	the light color will be refreshed instantly after the setting.<br/>
+	parameter <b>index</b> specifies the LED position on the strip.<br/>
+	parameters <b>red</b>, <b>green</b>, <b>blue</b> specify the LED color with three numbers between 0 to 255 for RGB channels.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setRGB(index, red, green, blue)</p>
+<p class="itemDesc">
+	set the RGB color value for a specified LED on the strip,
+	but the light color will not be refreshed until the function show() is called.<br/>
+	parameter <b>index</b> specifies the LED position on the strip.<br/>
+	parameters <b>red</b>, <b>green</b>, <b>blue</b> specify the LED color with three numbers between 0 to 255 for RGB channels.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">show()</p>
+<p class="itemDesc">
+	refresh all LED colors on the strip after called function setRGB() for one or several LEDs.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenShowRGB(index, red, green, blue)</p>
+<p class="itemDesc">
+	receive the callback after called function showRGB().
+</p>
+
+<p class="itemName">whenSetRGB(index, red, green, blue)</p>
+<p class="itemDesc">
+	receive the callback after called function setRGB().
+</p>
+
+<p class="itemName">whenShow()</p>
+<p class="itemDesc">
+	receive the callback after called function show().
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">LEDStripDataStream</p>
+<p class="itemDesc">
+	<b>KHZ800</b> handles 800Hz bit streams<br/>
+	<b>KHZ400</b> handles 400Hz bit streams<br/>
+	&nbsp;<br/>
+	a matched data stream setting is required for a particular model.<br/>
+	see Adafruit_NeoPixel.h for more details
+</p>
+
+<p class="itemName">LEDStripDataOrder</p>
+<p class="itemDesc">
+	<b>RGB </b> &nbsp;
+	<b>RBG </b> &nbsp;
+	<b>GRB </b> &nbsp;
+	<b>GBR </b> &nbsp;
+	<b>BRG </b> &nbsp;
+	<b>BGR </b> &nbsp;
+	<br/>
+
+	<b>WRGB</b> &nbsp;
+	<b>WRBG</b> &nbsp;
+	<b>WGRB</b> &nbsp;
+	<b>WGBR</b> &nbsp;
+	<b>WBRG</b> &nbsp;
+	<b>WBGR</b> &nbsp;
+	<br/>
+
+	<b>RWGB</b> &nbsp;
+	<b>RWBG</b> &nbsp;
+	<b>RGWB</b> &nbsp;
+	<b>RGBW</b> &nbsp;
+	<b>RBWG</b> &nbsp;
+	<b>RBGW</b> &nbsp;
+	<br/>
+
+	<b>GWRB</b> &nbsp;
+	<b>GWBR</b> &nbsp;
+	<b>GRWB</b> &nbsp;
+	<b>GRBW</b> &nbsp;
+	<b>GBWR</b> &nbsp;
+	<b>GBRW</b> &nbsp;
+	<br/>
+
+	<b>BWRG</b> &nbsp;
+	<b>BWGR</b> &nbsp;
+	<b>BRWG</b> &nbsp;
+	<b>BRGW</b> &nbsp;
+	<b>BGWR</b> &nbsp;
+	<b>BGRW</b> &nbsp;
+	<br/>
+
+	&nbsp;<br/>
+	a matched data order setting is required for a particular model.<br/>
+	see Adafruit_NeoPixel.h for more details
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

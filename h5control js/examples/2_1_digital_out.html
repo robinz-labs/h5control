@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Digital Out</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var led1 = new DigitalOut(); // for led on arduino board
+	var led2 = new DigitalOut(); // for pwm testing
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		led1.setup(unit, 13);
+		led2.setup(unit, 11);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	led1.whenGetValue = function(value) {
+		alert("LED is " + (value ? "ON" : "OFF"));
+	};
+
+	led1.whenSetValue = function(value) {
+		document.getElementById("status").innerHTML = "LED is set to " + (value ? "ON" : "OFF");
+	};
+
+	led1.whenPulse = function(value, pw) {
+		document.getElementById("status").innerHTML = "created a " + pw + "us pulse";
+	};
+
+	led2.whenGetPwmValue = function(value) {
+		alert("PWM value is " + value + " ( " + Math.round(value/0xff*100) + "% LED brightness )");
+	};
+
+	led2.whenSetPwmValue = function(value) {
+		document.getElementById("status").innerHTML = "pwm output is set to " + value;
+	};
+
+    var ledBlinkingTimer = null;
+    var ledState = 0;
+    function startLedBlinking() {
+        if (ledBlinkingTimer == null) {
+            ledBlinkingTimer = setInterval(function() {
+                ledState = (ledState ? 0 : 1);
+                led1.setValue(ledState);
+            }, 500);
+        }
+    }
+    function stopLedBlinking() {
+        if (ledBlinkingTimer != null) {
+            clearInterval(ledBlinkingTimer);
+            ledBlinkingTimer = null;
+        }
+    }
+
+</script>
+</head>
+
+<body>
+<h1>Digital Out Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control LED on Arduino Board (pin 13)</h2>
+<p>
+	<input type="button" value="led on"
+		   onclick="led1.setValue(1);" />
+	<input type="button" value="led off"
+		   onclick="led1.setValue(0);" />
+	<input type="button" value="led state ?"
+		   onclick="led1.getValue();" />
+	<input type="button" value="pulse 100us"
+		   onclick="led1.pulse(1, 100);" />
+	<input type="button" value="pulse 1000us"
+		   onclick="led1.pulse(1, 1000);" />
+	<input type="button" value="pulse 10000us"
+		   onclick="led1.pulse(1, 10000);" />
+</p>
+<p><img src="images/digital_out_1.png" width="640" height="500" /></p>
+<pre>
+var led1 = new DigitalOut();
+
+led1.setup(1, 13);    // set up a digital output with pin 13 on unit 1
+led1.setValue(1);     // the digital output is set to high level, turn on the LED
+led1.setValue(0);     // the digital output is set to low level, turn off the LED
+led1.pulse(1, 1000);  // create a pulse (high level, pulse width is 1000us)
+led1.pulse(0, 5000);  // create a pulse (low level, pulse width is 5000us)
+</pre>
+
+<p>&nbsp;</p>
+
+<h2>Experiment 2 - Control LED Brightness with PWM (pin 11)</h2>
+<p>
+	<input type="button" value="pwm 0%"
+		   onclick="led2.setPwmValue(0);" />
+	<input type="button" value="pwm 10%"
+		   onclick="led2.setPwmValue(Math.round(0xff*0.1));" />
+	<input type="button" value="pwm 20%"
+		   onclick="led2.setPwmValue(Math.round(0xff*0.2));" />
+	<input type="button" value="pwm 50%"
+		   onclick="led2.setPwmValue(Math.round(0xff*0.5));" />
+	<input type="button" value="pwm 100%"
+		   onclick="led2.setPwmValue(0xff);" />
+	<input type="button" value="pwm value ?"
+		   onclick="led2.getPwmValue();" />
+
+</p>
+<p><img src="images/digital_out_2.png" width="640" height="500" /></p>
+<pre>
+var led2 = new DigitalOut();
+
+led2.setup(1, 11);     // set up a digital output with pin 11 on unit 1
+led2.setPwmValue(0);   // the pwm output is set to 0, turn off the LED
+led2.setPwmValue(127); // the pwm output is set to 127, 50% LED brightness
+led2.setPwmValue(255); // the pwm output is set to 255, 100% LED brightness
+</pre>
+<p>
+	The PWM output can be set to a number value ranges between 0 and 255. <br/>
+	Number 3, 5, 6, 9, 10, 11 pins are available for PWM output on an Arduino UNO board.<br/>
+	Number 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, <s>12, 13</s>, 44, 45, 46 pins are available for PWM output
+	on an Arduino MEGA board. <br/>
+	(pin 12, pin 13 are occupied and reserved by h5control system)
+</p>
+<p>&nbsp;</p>
+
+<h2> Experiment 3 - LED Blinking on Arduino Board (pin 13)</h2>
+<p>
+    <input type="button" value="led blinking on"
+           onclick="startLedBlinking();" />
+    <input type="button" value="led blinking off"
+           onclick="stopLedBlinking();" />
+</p>
+<p><img src="images/digital_out_3.png" width="640" height="500" /></p>
+
+<pre>
+var led1 = new DigitalOut();
+led1.setup(1, 13);    // set up a digital output for pin 13 on unit 1
+
+var ledState = 0;     // set up a timer for switching led state frequently
+setInterval(
+    function() {
+        ledState = (ledState ? 0 : 1);
+        led1.setValue(ledState);
+    },
+    500);
+</pre>
+
+<p>&nbsp;</p>
+<h1>Digital Out Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">DigitalOut</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize a digital output object with a specified <b>pin</b> on a specified <b>unit</b>. <br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setValue(value)</p>
+<p class="itemDesc">
+	set number 0 or 1 to parameter <b>value</b> for changing state of the digital output signal.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setPwmValue(value)</p>
+<p class="itemDesc">
+	set a number value between 0 to 255 to the parameter <b>value</b> for changing duty ratio of the PWM output signal.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setPwmPeriod(period)</p>
+<p class="itemDesc">
+	set <b>period</b> of the PWM output (no implementation in the present version).<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">pulse(value, pw)</p>
+<p class="itemDesc">
+	create a pulse with the specified voltage level and pulse width. <br/>
+	set parameter <b>value</b> as 1 for a pulse with high voltage level output, 0 for a pulse with low voltage level output. <br/>
+	set parameter <b>pw</b> as a microsecond value to specify the pulse width.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to get the present state of the output signal, an event callback whenGetValue() will be received later.<br/>
+	return value: the output signal value, number 0 or number 1
+</p>
+
+<p class="itemName">getPwmValue()</p>
+<p class="itemDesc">
+	request to get the present value of the PWM output signal, an event callback whenGetPwmValue() will be received later.<br/>
+	return value: the PWM output value, a number between 0 to 255
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.</p>
+
+<p class="itemName">whenSetValue(value)</p>
+<p class="itemDesc">receive the callback when digital output <b>value</b> has been set.</p>
+
+<p class="itemName">whenSetPwmValue(value)</p>
+<p class="itemDesc">receive the callback when PWM output <b>value</b> has been set.</p>
+
+<p class="itemName">whenSetPwmPeriod(period)</p>
+<p class="itemDesc">receive the callback when PWM output <b>period</b> has been set.</p>
+
+<p class="itemName">whenPulse(value, pw)</p>
+<p class="itemDesc">receive the callback when a pulse has been just created.</p>
+
+<p class="itemName">whenGetValue(value)</p>
+<p class="itemDesc">receive the callback to get the present digital output <b>value</b> after called function getValue().</p>
+
+<p class="itemName">whenGetPwmValue(value)</p>
+<p class="itemDesc">receive the callback to get the present PWM output <b>value</b> after called function getPwmValue().</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

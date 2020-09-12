@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Analog In</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var potentiometer1 = new AnalogIn();
+	var potentiometer2 = new AnalogIn();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		potentiometer1.setup(unit, Arduino.MEGA.A4);
+		potentiometer2.setup(unit, Arduino.MEGA.A5, 5, 2000);
+
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	potentiometer1.whenGetValue = function(value) {
+		alert("potentiometer value is " + value + " ( " + Math.round((value/0xffff)*100) + " % )");
+	};
+
+	potentiometer1.whenStartMonitor = function() {
+		document.getElementById("status").innerHTML = "potentiometer monitor is started";
+	};
+
+	potentiometer1.whenStopMonitor = function() {
+		document.getElementById("status").innerHTML = "potentiometer monitor is stopped";
+	};
+
+	potentiometer1.whenUpdateValue = function(value) {
+		document.getElementById("status").innerHTML = "potentiometer value is " + value + " ( " + Math.round((value/0xffff)*100) + " % )";
+	};
+
+	potentiometer2.whenGetValue = function(value) {
+		alert("potentiometer value is " + value + " ( " + Math.round((value/0xffff)*100) + " % )");
+	};
+
+	potentiometer2.whenStartMonitor = function() {
+		document.getElementById("status").innerHTML = "potentiometer monitor is started";
+	};
+
+	potentiometer2.whenStopMonitor = function() {
+		document.getElementById("status").innerHTML = "potentiometer monitor is stopped";
+	};
+
+	potentiometer2.whenUpdateValue = function(value) {
+		document.getElementById("status").innerHTML = "potentiometer value is " + value + " ( " + Math.round((value/0xffff)*100) + " % )";
+	};
+
+</script>
+</head>
+
+<body>
+<h1>Analog In Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Simple Analog Input (pin A4)</h2>
+<p>
+	<input type="button" value="get input value"
+		   onclick="potentiometer1.getValue();" />
+	<input type="button" value="start monitor"
+		   onclick="potentiometer1.startMonitor(200);" />
+	<input type="button" value="stop monitor"
+		   onclick="potentiometer1.stopMonitor();" />
+</p>
+<p><img src="images/analog_in_1.png" width="640" height="450" /></p>
+<pre>
+var potentiometer1 = new AnalogIn();
+
+// set up a analog input with pin A4 on unit 1
+potentiometer1.setup(1, Arduino.MEGA.A4);
+
+// get the present potentiometer value
+potentiometer1.whenGetValue = function(value) {
+	alert( "potentiometer value is " + value );
+};
+potentiometer1.getValue();
+
+// start a monitor to detect the potentiometer value updating
+potentiometer1.whenUpdateValue = function(value) {
+	document.getElementById("status").innerHTML = "potentiometer value is " + value;
+};
+potentiometer1.startMonitor(200);  // for value updating every 200 milliseconds
+
+</pre>
+
+<p>&nbsp;</p>
+
+<h2> Experiment 2 - Analog Input with Advanced Options (pin A5)</h2>
+<p>
+	<input type="button" value="get input value"
+		   onclick="potentiometer2.getValue();" />
+	<input type="button" value="start monitor (high sensitive)"
+		   onclick="potentiometer2.startMonitor(0, 16);" />
+	<input type="button" value="start monitor (low sensitive)"
+		   onclick="potentiometer2.startMonitor(50, 8);" />
+	<input type="button" value="stop monitor"
+		   onclick="potentiometer2.stopMonitor();" />
+</p>
+<p><img src="images/analog_in_2.png" width="640" height="450" /></p>
+<pre>
+var potentiometer2 = new AnalogIn();
+
+// set up an analog input with pin A5 on unit 1
+// and enable a filter
+potentiometer2.setup(
+	1,               // unit 1
+	Arduino.MEGA.A4, // pin A4
+	5,               // filter level 5
+	2000,            // sampling interval is 2000 microseconds
+);
+
+// start a high sensitive monitor to detect the potentiometer value changing
+potentiometer2.startMonitor(
+	10,  // the minimum value updating interval is 10 milliseconds
+	16,  // emit value updating callback when any bit of the raw analog input 16-bit value is changed
+);
+
+// start a low sensitive monitor to detect the potentiometer value changing
+potentiometer2.startMonitor(
+	100, // the minimum value updating interval is 100 milliseconds
+	6,   // emit value updating callback only when high 6-bit data (MSB) of the raw analog input value is changed
+);
+
+</pre>
+<p>
+	<b>Analog Value</b><br/>
+	Any analog value handled in h5control is a 16-bit unsigned integer number.
+	In other word, the minimum analog value is 0, and the maximum analog value is 65535.
+</p>
+<p><a name="filter"></a>
+	<b>Using Filter</b><br/>
+	In order to obtain analog input value with smooth changing, the filter should be enabled.
+	Usually, a smoothing analog input value is automatically calculated by the filter routine using weighted average of all sampling value in one test cycle.
+</p>
+<p>
+	Two optional setup parameters <i>filter level</i> and <i>sampling interval</i> need be set for the analog input filter.
+	<i>filter level</i> is the continued sampling times for a smoothing readout,
+	and <i>sampling interval</i> is the interval time in microseconds between each sampling.
+</p>
+<p><a name="monitor"></a>
+	<b>Monitor Sensitivity</b><br/>
+	If need obtain analog input value efficiently with a monitor,
+	to set the sensitivity for the monitor is required.
+</p>
+<p>
+	Two optional sensitivity parameters <i>updating interval</i> and <i>significant bits</i> need be set for the analog input monitor.
+	<i>updating interval</i> is the minimum interval time in milliseconds to emit the callback for the value updating.
+	And, the monitor routine detects analog input value updating in the specified <i>significant bits</i>,
+	ignores the insignificant interference as well.
+</p>
+
+<p>&nbsp;</p>
+
+<h1>Analog In Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">AnalogIn</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin, <i><s>filterLevel</s></i>, <i><s>samplingInterval</s></i>)</p>
+<p class="itemDesc">
+	initialize an analog input object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	<b>filterLevel</b> and <b>samplingInterval</b> is optional parameters to enable a filter of the analog input.
+	<a href="#filter">info</a><br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getValue()</p>
+<p class="itemDesc">
+	request to get the present value of the analog input signal,
+	an event callback whenGetValue() will be received later.<br/>
+	return value: the analog input value, a number between 0 to 65535.
+</p>
+
+<p class="itemName">startMonitor(<i><s>updatingInterval</s></i>, <i><s>significantBits</s></i>)</p>
+<p class="itemDesc">
+	start a monitor to detect the analog input value updating.<br/>
+	parameter <b>updatingInterval</b> is in milliseconds, <b>significantBits</b> is a number between 1 to 16.
+	<a href="#monitor">info</a><br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">stopMonitor()</p>
+<p class="itemDesc">
+	stop the monitor to detect the analog input value updating<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenGetValue(value)</p>
+<p class="itemDesc">
+	receive the callback to get the present analog input <b>value</b> after called function getValue().
+</p>
+
+<p class="itemName">whenStartMonitor()</p>
+<p class="itemDesc">
+	receive the callback to confirm the monitor is started after called function startMonitor().
+</p>
+
+<p class="itemName">whenStopMonitor()</p>
+<p class="itemDesc">
+	receive the callback to confirm the monitor is stopped after called function startMonitor().
+</p>
+
+<p class="itemName">whenUpdateValue(value)</p>
+<p class="itemDesc">
+	receive the callback when the analog input <b>value</b> is updated after started the monitor.
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">Arduino.UNO</p>
+<p class="itemDesc">
+	analog input pins on Arduino UNO or other ATmega328-based board:<br/>
+	<b>A0</b> &nbsp;
+	<b>A1</b> &nbsp;
+	<b>A2</b> &nbsp;
+	<b>A3</b> &nbsp;
+	<b>A4</b> &nbsp;
+	<b>A5</b> &nbsp;
+	<b>A6</b> &nbsp;
+	<b>A7</b> &nbsp;
+</p>
+
+<p class="itemName">Arduino.MEGA</p>
+<p class="itemDesc">
+	analog input pins on Arduino MEGA board:<br/>
+	<b>A0</b> &nbsp;
+	<b>A1</b> &nbsp;
+	<b>A2</b> &nbsp;
+	<b>A3</b> &nbsp;
+	<b>A4</b> &nbsp;
+	<b>A5</b> &nbsp;
+	<b>A6</b> &nbsp;
+	<b>A7</b> &nbsp;
+	<b>A8</b> &nbsp;
+	<b>A9</b> &nbsp;
+	<b>A10</b> &nbsp;
+	<b>A11</b> &nbsp;
+	<b>A12</b> &nbsp;
+	<b>A13</b> &nbsp;
+	<b>A14</b> &nbsp;
+	<b>A15</b> &nbsp;
+</p>
+
+<p class="itemName">Arduino.DUE</p>
+<p class="itemDesc">
+	analog input pins on Arduino DUE board:<br/>
+	<b>A0</b> &nbsp;
+	<b>A1</b> &nbsp;
+	<b>A2</b> &nbsp;
+	<b>A3</b> &nbsp;
+	<b>A4</b> &nbsp;
+	<b>A5</b> &nbsp;
+	<b>A6</b> &nbsp;
+	<b>A7</b> &nbsp;
+	<b>A8</b> &nbsp;
+	<b>A9</b> &nbsp;
+	<b>A10</b> &nbsp;
+	<b>A11</b> &nbsp;
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

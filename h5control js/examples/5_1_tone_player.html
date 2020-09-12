@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Tone Player</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var player1 = new TonePlayer();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		player1.setup(unit, 6);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	player1.whenPlay = function(frequency) {
+		document.getElementById("status").innerHTML = "playing a tone of " + frequency + " Hz";
+	};
+
+	player1.whenStop = function(stop) {
+		document.getElementById("status").innerHTML = "tone playing stopped";
+	};
+
+	function playMelody() {
+
+		setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 0);
+		setTimeout(function() {	player1.play(MusicNote.E3, 220); }, 250);
+		setTimeout(function() {	player1.play(MusicNote.E3, 440); }, 500);
+
+		setTimeout(function() { player1.play(MusicNote.F3, 220); }, 1000);
+		setTimeout(function() { player1.play(MusicNote.D3, 220); }, 1250);
+		setTimeout(function() { player1.play(MusicNote.D3, 440); }, 1500);
+
+		setTimeout(function() { player1.play(MusicNote.C3, 220); }, 2000);
+		setTimeout(function() { player1.play(MusicNote.D3, 220); }, 2250);
+		setTimeout(function() { player1.play(MusicNote.E3, 220); }, 2500);
+		setTimeout(function() { player1.play(MusicNote.F3, 220); }, 2750);
+
+		setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 3000);
+		setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 3250);
+		setTimeout(function() {	player1.play(MusicNote.G3, 440); }, 3500);
+	}
+
+</script>
+</head>
+
+<body>
+<h1>Tone Player Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Play Tones with A Speaker or Buzzer (pin 6)</h2>
+<p>
+	PLAY TONE: <br/>
+	<input type="button" value="200Hz"
+		   onclick="player1.play(200);" />
+	<input type="button" value="400Hz"
+		   onclick="player1.play(400);" />
+	<input type="button" value="600Hz"
+		   onclick="player1.play(600);" />
+	<input type="button" value="800Hz"
+		   onclick="player1.play(800);" />
+	<input type="button" value="1200Hz"
+		   onclick="player1.play(1200);" />
+	<input type="button" value="1500Hz"
+		   onclick="player1.play(1500);" />
+	<input type="button" value="stop"
+		   onclick="player1.stop();" />
+	<br/><br/>
+	PLAY MUSIC NOTE: <br/>
+	<input type="button" value="C"
+		   onclick="player1.play(MusicNote.C3);" />
+	<input type="button" value="C#"
+		   onclick="player1.play(MusicNote.CS3);" />
+	<input type="button" value="D"
+		   onclick="player1.play(MusicNote.D3);" />
+	<input type="button" value="D#"
+		   onclick="player1.play(MusicNote.DS3);" />
+	<input type="button" value="E"
+		   onclick="player1.play(MusicNote.E3);" />
+	<input type="button" value="F"
+		   onclick="player1.play(MusicNote.F3);" />
+	<input type="button" value="F#"
+		   onclick="player1.play(MusicNote.FS3);" />
+	<input type="button" value="G"
+		   onclick="player1.play(MusicNote.G3);" />
+	<input type="button" value="G#"
+		   onclick="player1.play(MusicNote.GS3);" />
+	<input type="button" value="A"
+		   onclick="player1.play(MusicNote.A3);" />
+	<input type="button" value="A#"
+		   onclick="player1.play(MusicNote.AS3);" />
+	<input type="button" value="B"
+		   onclick="player1.play(MusicNote.B3);" />
+	<input type="button" value="stop"
+		   onclick="player1.stop();" />
+	<br/><br/>
+	<input type="button" value="play melody"
+		   onclick="playMelody();" />
+</p>
+<p><img src="images/tone_player_1.png" width="640" height="570" /></p>
+<pre>
+var player1 = new TonePlayer();
+
+// set up a tone player wired with pin 6 on unit 1
+player1.setup(1, 6);
+
+player1.play(500);          // generate a 500Hz tone
+player1.play(1000);         // generate a 1000Hz tone
+player1.play(MusicNote.C3); // play a C3 note (a 131Hz tone)
+
+player1.stop();             // stop playing tone
+
+player1.play(700, 500);     // generate a 700Hz tone for 500 milliseconds
+
+// play a melody
+setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 0);
+setTimeout(function() {	player1.play(MusicNote.E3, 220); }, 250);
+setTimeout(function() {	player1.play(MusicNote.E3, 440); }, 500);
+
+setTimeout(function() { player1.play(MusicNote.F3, 220); }, 1000);
+setTimeout(function() { player1.play(MusicNote.D3, 220); }, 1250);
+setTimeout(function() { player1.play(MusicNote.D3, 440); }, 1500);
+
+setTimeout(function() { player1.play(MusicNote.C3, 220); }, 2000);
+setTimeout(function() { player1.play(MusicNote.D3, 220); }, 2250);
+setTimeout(function() { player1.play(MusicNote.E3, 220); }, 2500);
+setTimeout(function() { player1.play(MusicNote.F3, 220); }, 2750);
+
+setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 3000);
+setTimeout(function() {	player1.play(MusicNote.G3, 220); }, 3250);
+setTimeout(function() {	player1.play(MusicNote.G3, 440); }, 3500);
+</pre>
+<p>
+	The parameter of the play() function is a frequency value that can be set for generating a specific tone.<br/>
+	The allowed frequency value can range between 20 and 20000 hertz for the sound a human ear can hear.
+</p>
+
+<p>&nbsp;</p>
+<h1>Tone Player Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">TonePlayer</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize a tone player object with a specified pin on a specified unit.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">play(frequency, <i>duration</i>)</p>
+<p class="itemDesc">
+	set the frequency and duration value for generating a specific tone.
+	If the optional parameter duration is not set, the tone playing will never stop until function stop() called.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">stop()</p>
+<p class="itemDesc">
+	stop playing tone.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter done is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenPlay(frequency)</p>
+<p class="itemDesc">
+	receive the callback when the tone playing is beginning.
+</p>
+
+<p class="itemName">whenStop()</p>
+<p class="itemDesc">
+	receive the callback when the tone playing is stopped.
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Types</h2>
+
+<p class="itemName">MusicNote</p>
+<p class="itemDesc">
+	<b>B0 </b> 31Hz<br/>
+	<b>C1 </b> 33Hz &nbsp; <b>   CS1</b> 35Hz &nbsp; <b>   D1 </b> 37Hz &nbsp; <b>   DS1</b> 39Hz &nbsp; <b>   E1 </b> 41Hz &nbsp; <b>   F1 </b> 44Hz<br/>
+	<b>FS1</b> 46Hz &nbsp; <b>   G1 </b> 49Hz &nbsp; <b>   GS1</b> 52Hz &nbsp; <b>   A1 </b> 55Hz &nbsp; <b>   AS1</b> 58Hz &nbsp; <b>   B1 </b> 62Hz<br/>
+	<b>C2 </b> 65Hz &nbsp; <b>   CS2</b> 69Hz &nbsp; <b>   D2 </b> 73Hz &nbsp; <b>   DS2</b> 78Hz &nbsp; <b>   E2 </b> 82Hz &nbsp; <b>   F2 </b> 87Hz<br/>
+	<b>FS2</b> 93Hz &nbsp; <b>   G2 </b> 98Hz &nbsp; <b>   GS2</b> 104Hz &nbsp; <b>  A2 </b> 110Hz &nbsp; <b>  AS2</b> 117Hz &nbsp; <b>  B2 </b> 123Hz<br/>
+	<b>C3 </b> 131Hz &nbsp; <b>  CS3</b> 139Hz &nbsp; <b>  D3 </b> 147Hz &nbsp; <b>  DS3</b> 156Hz &nbsp; <b>  E3 </b> 165Hz &nbsp; <b>  F3 </b> 175Hz<br/>
+	<b>FS3</b> 185Hz &nbsp; <b>  G3 </b> 196Hz &nbsp; <b>  GS3</b> 208Hz &nbsp; <b>  A3 </b> 220Hz &nbsp; <b>  AS3</b> 233Hz &nbsp; <b>  B3 </b> 247Hz<br/>
+	<b>C4 </b> 262Hz &nbsp; <b>  CS4</b> 277Hz &nbsp; <b>  D4 </b> 294Hz &nbsp; <b>  DS4</b> 311Hz &nbsp; <b>  E4 </b> 330Hz &nbsp; <b>  F4 </b> 349Hz<br/>
+	<b>FS4</b> 370Hz &nbsp; <b>  G4 </b> 392Hz &nbsp; <b>  GS4</b> 415Hz &nbsp; <b>  A4 </b> 440Hz &nbsp; <b>  AS4</b> 466Hz &nbsp; <b>  B4 </b> 494Hz<br/>
+	<b>C5 </b> 523Hz &nbsp; <b>  CS5</b> 554Hz &nbsp; <b>  D5 </b> 587Hz &nbsp; <b>  DS5</b> 622Hz &nbsp; <b>  E5 </b> 659Hz &nbsp; <b>  F5 </b> 698Hz<br/>
+	<b>FS5</b> 740Hz &nbsp; <b>  G5 </b> 784Hz &nbsp; <b>  GS5</b> 831Hz &nbsp; <b>  A5 </b> 880Hz &nbsp; <b>  AS5</b> 932Hz &nbsp; <b>  B5 </b> 988Hz<br/>
+	<b>C6 </b> 1047Hz &nbsp; <b>  CS6</b> 1109Hz &nbsp; <b>  D6 </b> 1175Hz &nbsp; <b>  DS6</b> 1245Hz &nbsp; <b>  E6 </b> 1319Hz &nbsp; <b>  F6 </b> 1397Hz<br/>
+	<b>FS6</b> 1480Hz &nbsp; <b>  G6 </b> 1568Hz &nbsp; <b>  GS6</b> 1661Hz &nbsp; <b>  A6 </b> 1760Hz &nbsp; <b>  AS6</b> 1865Hz &nbsp; <b>  B6 </b> 1976Hz<br/>
+	<b>C7 </b> 2093Hz &nbsp; <b>  CS7</b> 2217Hz &nbsp; <b>  D7 </b> 2349Hz &nbsp; <b>  DS7</b> 2489Hz &nbsp; <b>  E7 </b> 2637Hz &nbsp; <b>  F7 </b> 2794Hz<br/>
+	<b>FS7</b> 2960Hz &nbsp; <b>  G7 </b> 3136Hz &nbsp; <b>  GS7</b> 3322Hz &nbsp; <b>  A7 </b> 3520Hz &nbsp; <b>  AS7</b> 3729Hz &nbsp; <b>  B7 </b> 3951Hz<br/>
+	<b>C8 </b> 4186Hz &nbsp; <b>  CS8</b> 4435Hz &nbsp; <b>  D8 </b> 4699Hz &nbsp; <b>  DS8</b> 4978Hz<br/>
+	&nbsp;<br/>
+	enumerates frequencies of 88 musical notes.<br/>
+	there are C, C#, D, D#, E, F, F#, G, G#, A, A#, B twelve notes in each scale.<br/>
+	character S means "sharp", # the rising note.<br/>
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>

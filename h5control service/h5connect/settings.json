@@ -1,0 +1,39 @@
+{
+    "logger-enabled": 1,
+    "messaging-interval": 50,
+    "connections": [
+        {
+            "vid": 1027,
+            "pid": 24577,
+            "baud": 115200
+        },
+        {
+            "vid": 9025,
+            "baud": 115200
+        },
+        {
+            "_disabled": 0,
+            "port": "cu.ELET-ELETSPP",
+            "baud": 115200
+        },
+        {
+            "_disabled": 1,
+            "port": "cu.GLSA_00000001-ELETSPP",
+            "baud": 115200
+        }
+    ],
+    "service": {
+        "websocket-port": 50000,
+        "http-port": 58000,
+        "udp-in-port": 0,
+        "udp-out-port": 0,
+        "udp-out-host": "127.0.0.1"
+    },
+    "initialized-messages-disabled": [
+        {"wait":500},
+        {"from":0, "to":255, "data":"0001000000000000", "wait":3000},
+        {"from":0, "to":255, "data":"02000d0000000000"},
+        {"from":0, "to":255, "data":"02010d0100000000", "wait":1000},
+        {"from":0, "to":255, "data":"02010d0000000000"}
+    ]
+}

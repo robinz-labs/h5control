@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - System Objects</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+</head>
+
+<body>
+
+<div id="status"></div>
+
+<h1>H5Control Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">H5Control</p>
+<p class="itemDesc">
+	the necessary programming interface of a h5control system environment is provided in class H5Control.<br/>
+	usually, there is only one global shared instance of class H5Control in a web app including h5control.js, the instance object name is h5control.
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+<p class="itemName">setup(host, <i><s>wsPort</s></i>, <i><s>httpPort</s></i>)</p>
+<p class="itemDesc">
+	initialize the h5control environment, h5control.setup() must be called in every web app. <br/>
+	parameter <b>wsPort</b> is optional. The default web socket port used for the h5control system is 50000,
+	set this parameter if has a customized web socket port.<br/>
+	parameter <b>httpPort</b> is optional. the default http port used for the h5control system is 58000,
+	set this parameter if has a customized http port.<br/>
+	return value: none
+</p>
+
+<p class="itemName">resetUnit(unit)</p>
+<p class="itemDesc">
+	reset a specified unit. The value of parameter <b>unit</b> is the unit id of the device.<br/>
+	the configuration in the device will be cleared after reset the unit.<br/>
+	return value: none
+</p>
+
+<p class="itemName">resetAll()</p>
+<p class="itemDesc">
+	reset all units<br/>
+	return value: none
+</p>
+
+<p class="itemName">beginSyncAll()</p>
+<p class="itemDesc">
+	begin synchronous execution on all units<br/>
+	return value: none
+</p>
+
+<p class="itemName">finishSyncAll()</p>
+<p class="itemDesc">
+	finish synchronous execution on all units<br/>
+	return value: none
+</p>
+
+<p class="itemName">silenceAll(mode)</p>
+<p class="itemDesc">
+	enable the silence mode if want to ignore unessential callbacks for higher execution efficiency.
+	disable the silence mode if want to receive all callbacks.<br/>
+	set true or false to parameter <b>mode</b> to enable or disable the silence mode for all units.<br/>
+	return value: none
+</p>
+
+<p class="itemName">sendRawData(data)</p>
+<p class="itemDesc">
+	send raw data to the h5control service.
+	this function is offered for the low-level handling to make extensions for h5control system.<br/>
+	parameter <b>data</b> is a byte array<br/>
+	return value: none
+</p>
+
+<p class="itemName">sendRawMessage(unit, msg)</p>
+<p class="itemDesc">
+	send a raw message to a specified h5control unit.<br/>
+	parameter <b>unit</b> is the destination unit id.<br/>
+	parameter <b>msg</b> is a byte array of the message.<br/>
+	return value: none
+</p>
+
+<p class="itemName">sendAndWaitRawMessage(unit, msg, <i><s>timeout</s></i>)</p>
+<p class="itemDesc">
+	send a raw message to a specified h5control unit, wait and receive the response.<br/>
+	parameter <b>unit</b> is the destination unit id.<br/>
+	parameter <b>msg</b> is a byte array of the message.<br/>
+	parameter <b>timeout</b> is optional, set the value in milliseconds.<br/>
+	return value: a byte array of the responded message.
+</p>
+
+<p class="itemName">waitRsp(<i><s>milliseconds</s></i>)</p>
+<p class="itemDesc">
+	waitRsp just means "wait for response".<br/>
+	execute h5control.waitRsp() to disable the asynchronous calling mode. <br/>
+	then, any function will always wait for a while until the hardware calling is finished,
+	and return the result data in return value. <br/>
+	optional parameter <b>milliseconds</b> is the timeout value of waiting response in milliseconds.<br/>
+	return value: none
+</p>
+
+<p class="itemName">nowaitRsp()</p>
+<p class="itemDesc">
+	nowaitRsp just means "no wait for response".<br/>
+	execute h5control.nowaitRsp() to enable the asynchronous calling mode. <br/>
+	then, any function will never wait for the hardware calling finish.<br/>
+	important, nowaitRsp is the default mode that will make your program running more efficient.<br/>
+	return value: none
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+<p class="itemName">whenConnect(connections)</p>
+<p class="itemDesc">
+	receive the callback when connected to the h5control service. <br/>
+	parameter <b>connections</b> is the total count of all device connections.
+</p>
+
+<p class="itemName">whenDisconnect()</p>
+<p class="itemDesc">
+	receive the callback when disconnected from the h5control service.
+</p>
+
+<p class="itemName">whenUnitReady(unit)</p>
+<p class="itemDesc">
+	receive the callback when a specified device unit just got ready.<br/>
+	parameter <b>unit</b> is the device unit id.
+</p>
+
+<p class="itemName">whenSendRawMessage(unit, msg)</p>
+<p class="itemDesc">
+	receive the callback when just sent a message to the specified unit.<br/>
+	parameter <b>unit</b> is the id of the destination device unit.<br/>
+	parameter <b>msg</b> is a byte array of the sent message.
+</p>
+
+<p class="itemName">whenReceiveRawMessage(unit, msg)</p>
+<p class="itemDesc">
+	receive the callback when a message was just received. <br/>
+	parameter <b>unit</b> is the id of the source device unit.<br/>
+	parameter <b>msg</b> is a byte array of the received message.
+</p>
+
+<p class="itemName">whenSendRawData(data)</p>
+<p class="itemDesc">
+	receive the callback when just sent some data to the specified unit.<br/>
+	parameter <b>data</b> is a byte array that was just sent.
+</p>
+
+<p class="itemName">whenReceiveRawData(data)</p>
+<p class="itemDesc">
+	receive the callback when some data was just received from h5control service. <br/>
+	parameter <b>data</b> is a byte array that was just received.
+<p>
+
+<p>&nbsp;</p>
+
+<h1>Device Unit Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">DeviceUnit</p>
+<p class="itemDesc">
+	the programming interface reserved for the controllable hardware units in h5control system is provided in class DeviceUnit.
+</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+<p class="itemName">setup(unit)</p>
+<p class="itemDesc">
+	initialize the h5control device unit object, parameter <b>unit</b> is the device unit id.<br/>
+	return value: none
+</p>
+
+<p class="itemName">reset()</p>
+<p class="itemDesc">
+	reset the device unit. the configuration in the device will be cleared after reset the unit.<br/>
+	return value: none
+</p>
+
+<p class="itemName">beginSync()</p>
+<p class="itemDesc">
+	begin synchronous execution on the unit.<br/>
+	all function calls on this unit will be executed synchronously until finishSync() is called.
+	that means all function calls between beginSync() and finishSync() will merge into "one call" transferred to the device unit.
+	and the device will execute each one in this merged call with no delay.
+	<br/>
+	synchronous execution brings better real-time hardware handling into h5control.
+	the following example shows a procedure using synchronous execution to start two motors at the same time:<br/>
+	<br/>
+	myUnit.beginSync();<br/>
+	motorLeft.setPower(100);<br/>
+	motorRight.setPower(100);<br/>
+	myUnit.finishSync();<br/>
+	<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">finishSync()</p>
+<p class="itemDesc">
+	finish synchronous execution on the unit<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">silence(mode)</p>
+<p class="itemDesc">
+	enable the silence mode if want to ignore unessential callbacks for higher execution efficiency.
+	disable the silence mode if want to receive all callbacks.<br/>
+	set true or false to parameter <b>mode</b> to enable or disable the silence mode for the unit.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">sleep(milliseconds, <i><s>rspMode</s></i>)</p>
+<p class="itemDesc">
+	call the processor on the device to sleep for a while until the specified time is passing.<br/>
+	parameter <b>milliseconds</b> is for setting the sleep duration.<br/>
+	parameter <b>rspMode</b> is optional, the default mode is 1.
+	no callback emitted if rspMode is set to 0;
+	a callback emitted when sleep beginning if rspMode is set to 1;
+	a callback emitted when sleep finished if rspMode is set to 2;
+	both callbacks emitted when sleep beginning and finished if rspMode is set to 3;
+	<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode,but no return value when uses nowaitRsp mode.</p>
+
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenReady()</p>
+<p class="itemDesc">
+	receive the callback when the device unit just got ready.
+</p>
+
+<p class="itemName">whenBeginSync()</p>
+<p class="itemDesc">
+	receive the callback when beginSync() is called.
+</p>
+
+<p class="itemName">whenFinishSync()</p>
+<p class="itemDesc">
+	receive the callback when finishSync() is called.
+</p>
+
+<p class="itemName">whenSilence(mode)</p>
+<p class="itemDesc">
+	receive the callback when the silence mode is changed on the unit.
+</p>
+
+<p class="itemName">whenSleep(milliseconds)</p>
+<p class="itemDesc">
+	receive the callback when the unit sleep beginning or finished.<br/>
+	parameter <b>milliseconds</b> specifies the sleep duration.
+	the parameter value is 0 when the unit sleep finished.
+<p>
+
+<p>&nbsp;</p>
+
+
+</body>
+</html>

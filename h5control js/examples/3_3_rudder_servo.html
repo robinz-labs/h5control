@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Rudder Servo</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var rudder1 = new RudderServo();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		rudder1.setup(unit, 9);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	rudder1.whenSetAngle = function(angle) {
+		document.getElementById("status").innerHTML = "rudder angle is set to " + angle + " degrees";
+	};
+
+	rudder1.whenGetAngle = function(angle) {
+		alert("present rudder angle is " + angle + " degrees.");
+	};
+
+	rudder1.whenSetEnable = function(enable) {
+		document.getElementById("status").innerHTML = "rudder servo is " + (enable ? "enabled" : "disabled" );
+	};
+
+	rudder1.whenGetEnable = function(enable) {
+		alert("rudder servo is " + (enable ? "enabled" : "disabled" ) + ".");
+	};
+</script>
+</head>
+
+<body>
+<h1>Rudder Servo Test</h1>
+
+<div id="status">starting...</div>
+
+<h2> Experiment 1 - Control Rudder Servo (pin 9)</h2>
+<p>
+	RUDDER ANGLE: <br/>
+	<input type="button" value="0°"
+		   onclick="rudder1.setAngle(0);" />
+	<input type="button" value="30°"
+		   onclick="rudder1.setAngle(30);" />
+	<input type="button" value="60°"
+		   onclick="rudder1.setAngle(60);" />
+	<input type="button" value="90°"
+		   onclick="rudder1.setAngle(90);" />
+	<input type="button" value="120°"
+		   onclick="rudder1.setAngle(120);" />
+	<input type="button" value="150°"
+		   onclick="rudder1.setAngle(150);" />
+	<input type="button" value="180°"
+		   onclick="rudder1.setAngle(180);" />
+	<input type="button" value="angle ?"
+		   onclick="rudder1.getAngle();" />
+	<br/><br/>
+	ENABLE: <br/>
+	<input type="button" value="on"
+		   onclick="rudder1.setEnable(1);" />
+	<input type="button" value="off"
+		   onclick="rudder1.setEnable(0);" />
+	<input type="button" value="enable ?"
+		   onclick="rudder1.getEnable();" />
+</p>
+<p><img src="images/rudder_servo_1.png" width="640" height="550" /></p>
+<pre>
+var rudder1 = new RudderServo();
+
+// set up a rudder servo wired with pin 9 on unit 1
+rudder1.setup(1, 9);
+
+rudder1.setAngle(0);   // rudder angle is set to 0 degrees
+rudder1.setAngle(90);  // rudder angle is set to 90 degrees
+rudder1.setAngle(180); // rudder angle is set to 180 degrees
+
+// get current rudder angle
+rudder1.whenGetAngle = function(angle) {
+	alert("present rudder angle is " + angle + " degrees.");
+};
+rudder1.getAngle();
+
+rudder1.setEnable(1);   // enable the rudder servo
+rudder1.setEnable(0);   // disable the rudder servo
+
+// get current rudder servo enable state
+rudder1.whenGetEnable = function(enable) {
+	alert("rudder servo is " + (enable ? "enabled" : "disabled" ) + ".");
+};
+rudder1.getEnable();
+</pre>
+<p>
+	The angle value can be set for controlling the rudder position.<br/>
+	The allowed angle value can range between 0 and 180 degrees.
+</p>
+
+<p>&nbsp;</p>
+<h1>Rudder Servo Reference</h1>
+<h2>Class Name</h2>
+<p class="itemName">RudderServo</p>
+
+<p>&nbsp;</p>
+
+<h2>Functions</h2>
+
+<p class="itemName">setup(unit, pin)</p>
+<p class="itemDesc">
+	initialize a rudder servo object with a specified <b>pin</b> on a specified <b>unit</b>.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">setAngle(angle)</p>
+<p class="itemDesc">
+	set the <b>angle</b> value for changing the rudder position between 0 and 180 degrees.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getAngle()</p>
+<p class="itemDesc">
+	request to get the current angle value of the rudder servo, an event callback whenGetAngle() will be received later.<br/>
+	return value: the rudder position, a number between 0 to 180.
+</p>
+
+<p class="itemName">setEnable(enable)</p>
+<p class="itemDesc">
+	set the <b>enable</b> state of the rudder servo. 0 is for disabling the servo, but 1 is for enabling the servo.<br/>
+	return value: true if successful, otherwise false.
+</p>
+
+<p class="itemName">getEnable()</p>
+<p class="itemDesc">
+	request to get the current enable state of the rudder servo, an event callback whenGetEnable() will be received later.<br/>
+	return value: number 0 means servo disabled, number 1 means servo enabled.
+</p>
+
+<p><b>Return Value Note:</b><br/>The function will return a value when your h5control program uses waitRsp mode, but no return value when uses nowaitRsp mode.</p>
+<p>&nbsp;</p>
+
+<h2>Events</h2>
+
+<p class="itemName">whenSetup(done)</p>
+<p class="itemDesc">
+	receive the callback when setup done. parameter <b>done</b> is true if successful or false otherwise.
+</p>
+
+<p class="itemName">whenSetAngle(angle)</p>
+<p class="itemDesc">
+	receive the callback when the rudder <b>angle</b> is changed.
+</p>
+
+<p class="itemName">whenGetAngle(angle)</p>
+<p class="itemDesc">
+	receive the callback to to get the current rudder <b>angle</b> after called function getAngle().
+</p>
+
+<p class="itemName">whenSetEnable(enable)</p>
+<p class="itemDesc">
+	receive the callback when the <b>enable</b> state is changed.
+</p>
+
+<p class="itemName">whenGetEnable(enable)</p>
+<p class="itemDesc">
+	receive the callback to to get the current <b>enable</b> state after called function getEnable().
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>
