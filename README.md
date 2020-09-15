@@ -1,6 +1,7 @@
 # h5control
-h5control service enables your web-based apps using javascript to control Arduino or other IoT hardware.
+h5control service enables your web-based apps using javascript to communicate with Arduino units and remotely control digital/analog IO, motors, servos, LED lights, sensors etc.
 
+download a full package of h5control distribution from  http://robinz.org/labs/downloads/h5control_20200909.zip
 
 ## h5control service
 
@@ -16,4 +17,4 @@ For detailed introduction of the concept and a complete tutorial, please see exa
 
 ## h5control device
 
-In order to make sure your Arduino working properly with h5control, a sketch named rioc-arduino must be downloaded to your Arduino board.  See also https://github.com/robinz-labs/rioc-arduino
+In order to make your Arduino work with h5control, a sketch named rioc-arduino must be uploaded to your Arduino board.  See also https://github.com/robinz-labs/rioc-arduino
