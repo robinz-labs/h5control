@@ -1,4 +1,12 @@
-// H5Control app framework v0.3.5
+/*
+
+ H5Control app framework
+ v0.3.6
+
+ Copyright 2016-2020 Robin Zhang & Labs
+ http://robinz.org/labs/
+
+*/
 
 var Arduino = {
 
@@ -110,10 +118,10 @@ H5Control.prototype.setup = function(host, wsPort, httpPort) {
 	var defaultWsPort   = 50000; // websocket - for asynchronous mode
 	var defaultHttpPort = 58000; // http      - for synchronous  mode
 
-	if (getUrlHost()) defaultHost = getUrlHost();
-	if (getUrlParameter("ip")) defaultHost = getUrlParameter("ip");
-	if (getUrlParameter("ws_port")) defaultWsPort = getUrlParameter("ws_port");
-	if (getUrlParameter("http_port")) defaultHttpPort = getUrlParameter("http_port");
+	//if (getUrlHost()) defaultHost = getUrlHost();
+	if (getUrlParameter("h5c_host_ip"  )) defaultHost     = getUrlParameter("h5c_host_ip");
+	if (getUrlParameter("h5c_ws_port"  )) defaultWsPort   = getUrlParameter("h5c_ws_port");
+	if (getUrlParameter("h5c_http_port")) defaultHttpPort = getUrlParameter("h5c_http_port");
 
 	this.host = host || defaultHost;
 	this.wsPort = wsPort || defaultWsPort;
