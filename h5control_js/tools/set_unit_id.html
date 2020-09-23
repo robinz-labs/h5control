@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Set Unit ID</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var unitCount = 0;
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function(connections) {
+		unitCount = connections;
+		var msg = "found " + connections + " unit(s)";
+		document.getElementById("status").innerHTML = msg;
+		document.getElementById("logs").innerHTML += msg + "<br/>";
+		h5control.resetAll(); // reset all units connected
+	}
+
+	h5control.whenDisconnect = function() {
+		document.getElementById("status").innerHTML = "system connection lost";
+	};
+
+	h5control.whenUnitReady = function(unit) {
+		var msg = "unit-" + unit + " is ready";
+		document.getElementById("status").innerHTML = msg;
+		document.getElementById("logs").innerHTML += msg + "<br/>";
+	}
+
+	function setUnitId() {
+
+		var msg;
+
+		if (unitCount == 0) {
+			msg = "ERROR: This is nothing connected now !";
+		} else if (unitCount > 1) {
+			msg = "WARNING: There are " + unitCount + " units connected now. \n\nAre you sure you need set a same unit ID to all connected Arduino units ?";
+		} else {
+			msg = "Are you sure you need set a new unit ID to the connected Arduino ?";
+		}
+
+		if (confirm(msg)) {
+
+			h5control.sendRawMessage(0xff, [0x00, 0x03, (document.getElementById('unitID').value)&0xff, 0, 0, 0, 0, 0]);
+			h5control.sendRawMessage(0xff, [0x00, 0x01, 0, 0, 0, 0, 0, 0]); // reset
+		}
+	}
+
+</script>
+</head>
+
+<body>
+<h1>h5Control - Set Unit ID</h1>
+
+<div id="status">starting...</div>
+
+<p>&nbsp;</p>
+<p>Please connect a h5control-ready Arduino board to the USB port on your computer and reload this page.</p>
+
+<p>
+	Unit ID: 
+	&nbsp;&nbsp;
+
+	<input type="text" value="1" id="unitID" />
+	<input type="button" value="Set Unit ID" onclick="setUnitId()" />
+
+	&nbsp;&nbsp; (1 ~ 254)
+
+</p>
+
+<p>&nbsp;</p>
+<pre id="logs"></pre>
+
+</body>
+</html>

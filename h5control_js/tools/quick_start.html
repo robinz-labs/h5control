@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - Quick Start</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+</head>
+
+<body>
+
+<h1>h5Control - Quick Start</h1>
+
+<p>&nbsp;</p>
+<p>h5control provides an easy way to enable your web app to control your own hardware with digital/analog IO, motors, servos, LED lights, sensors and other electronic gadgets. Now, let's play with h5control step by step.</p>
+<p><img src="images/h5control.png" width="600" height="350" /></p>
+
+<p>&nbsp;</p>
+<h2>Step 1 - Get an Arduino that is ready for h5control</h2>
+<p>Need an Arduino MEGA or UNO board.</p>
+<p><a href="http://robinz.org/labs/downloads/rioc-arduino.zip">Download</a> rioc-arduino sketch,
+open sketch RiocArduino.ino in Arduino IDE and upload the program to the Arduino. </p>
+<p>In order to be able to remote reset Arduino, also must use a wire to connect pin 12 to the RESET pin on the Arduino board.</p>
+<p><img src="images/reset_wire.png" width="640" height="400" /></p>
+
+<p>&nbsp;</p>
+<h2>Step 2 - Install and run h5control service</h2>
+<p>Mac: <br><a href="http://robinz.org/labs/downloads/h5connect-mac.zip">Download</a> h5control Service for macOS,  
+copy app "h5control Service" to your Applications folder and run it.</p>
+<p>Windows: <br><a href="http://robinz.org/labs/downloads/h5connect-win.zip">Download</a> h5control Service for windows, 
+copy folder "h5control Service" to your disk and run "h5connect.exe" or "h5connect-console.exe" in the folder. </p>
+
+<p>Now, connect your h5control-ready Arduino to your computer USB port, and <a href="set_unit_id.html" target="_blank">test in web</a> , where you can also assign an unit ID to your Arduino .</p>
+
+<p>&nbsp;</p>
+<h2>Step 3 - Learn h5control.js programming</h2>
+
+<p>
+h5control Basics<br>
+<a target="_blank" href="../examples/1_1_getting_started.html">1.1 Getting Started with h5control</a><br>
+<a target="_blank" href="../examples/1_2_web_inspector.html">1.2 Playing with Web Inspector</a><br>
+</p>
+
+<p>
+General IO Controls<br>
+<a target="_blank" href="../examples/2_1_digital_out.html">2.1 Digital Out</a><br>
+<a target="_blank" href="../examples/2_2_digital_in.html">2.2 Digital In</a><br>
+<a target="_blank" href="../examples/2_3_analog_out.html">2.3 Analog Out</a><br>
+<a target="_blank" href="../examples/2_4_analog_in.html">2.4 Analog In</a><br>
+<a target="_blank" href="../examples/2_5_uart_serial.html">2.5 UART Serial</a><br>
+</p>
+
+<p>
+Motion Controls<br>
+<a target="_blank" href="../examples/3_1_motor.html">3.1 Motor</a><br>
+<a target="_blank" href="../examples/3_2_stepper.html">3.2 Stepper</a><br>
+<a target="_blank" href="../examples/3_3_rudder_servo.html">3.3 Rudder Servo</a><br>
+</p>
+
+<p>
+Sensors<br>
+<a target="_blank" href="../examples/4_1_encoder.html">4.1 Encoder</a><br>
+<a target="_blank" href="../examples/4_2_ultrasonic_ranger.html">4.2 Ultrasonic Ranger</a><br>
+<a target="_blank" href="../examples/4_3_thermometer.html">4.3 Thermometer</a><br>
+</p>
+
+<p>
+Sound and Lights<br>
+<a target="_blank" href="../examples/5_1_tone_player.html">5.1 Tone Player</a><br>
+<a target="_blank" href="../examples/5_2_led_strip.html">5.2 LED Strip</a><br>
+</p>
+
+<p>
+Infrared Communication<br>
+<a target="_blank" href="../examples/6_1_ir_receiver.html">6.1 IR Receiver</a><br>
+<a target="_blank" href="../examples/6_2_ir_transmitter.html">6.2 IR Transmitter</a><br>
+</p>
+
+<p>
+System Programming<br>
+<a target="_blank" href="../examples/7_1_system_objects.html">7.1 System Objects</a><br>
+<a target="_blank" href="../examples/7_2_raw_message.html">7.2 Raw Message</a><br>
+</p>
+
+<p>&nbsp;</p>
+
+<p><img src="images/h5control_logo.png" width="128" height="128" /></p>
+<p>For more information about the developer and all source code of h5control, please visit 
+<a target="_blank" href="http://robinz.org">robinz.org</a> and 
+<a target="_blank" href="https://github.com/robinz-labs">github/robinz-labs</a> .<br>
+</p>
+
+</body>
+</html>
