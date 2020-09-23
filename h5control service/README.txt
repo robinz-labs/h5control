@@ -2,7 +2,7 @@ How to install and run h5control service ?
 ------------------------------------------
 
 Mac OS X:
-Copy app file package "h5control Service" to your disk and run it.
+Copy app "h5control Service" to your Applications folder and run it.
 
 Windows:
 Copy folder "h5control Service" to your disk and run "h5connect.exe" or "h5connect-console.exe" in the folder.

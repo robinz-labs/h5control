@@ -1,7 +1,9 @@
 # h5control
-h5control service enables your web-based apps using javascript to communicate with Arduino units and remotely control digital/analog IO, motors, servos, LED lights, sensors etc.
+h5control enables your web-based apps using javascript to communicate with Arduino units and remotely control digital/analog IO, motors, servos, LED lights, sensors etc.
 
-download a full package of h5control distribution from  http://robinz.org/labs/downloads/h5control_20200909.zip
+Quick Start Guide http://robinz.org/labs/h5control
+
+download a full package of h5control distribution from http://robinz.org/labs/downloads/h5control_full.zip
 
 ## h5control service
 
