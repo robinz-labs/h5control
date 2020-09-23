@@ -46,14 +46,12 @@
 
 <h2>What's h5control ?</h2>
 
-<p>h5control is a way to create your own robotics / IoT applications using HTML5.</p>
+<p>h5control provides an easy way to enable your web app to control your own hardware with digital/analog IO, motors, servos, LED lights, sensors and other electronic gadgets.</p>
 <ul>
-	<li>Never need MCU programming for hardware.</li>
-	<li>Easy and fast programming only using HTML5/JavaScript for all.</li>
-	<li>Easy debugging with Web Inspector as same as the way for a common web app.</li>
-	<li>Your IoT apps will run on mobile phones, pads or desktop computers.</li>
-	<li>Your IoT apps will connect your IoT hardware via USB or Bluetooth.</li>
-	<li>Your IoT apps will contain control logic and user interface all made with HTML5.</li>
+	<li>Employs popular open-source hardware Arduino.</li>
+	<li>Easy and fast programming only uses HTML5/JavaScript for all.</li>
+	<li>Easy debugging with Web Inspector is same as the way for a common web app.</li>
+	<li>Your web app will connect your hardware via USB or Bluetooth.</li>
 </ul>
 <p><img src="images/h5control.png" width="600" height="350" /></p>
 
@@ -61,18 +59,16 @@
 
 <h2>Before your programming</h2>
 <ul>
-	<li>Get an Arduino that is ready for h5control ( <a href="../../h5control%20device/README.txt">info</a> ).</li>
-	<li>Install h5control service to your computer ( <a href="../../h5control%20service/README.txt">info</a> ).</li>
-	<!--<li>Install h5control app to your iOS or Android mobile device.</li>-->
-	<li>Connect the Arduino to your computer through USB or Bluetooth.</li>
-	<li>Run h5control service program on your computer.</li>
+	<li>Get an Arduino that is ready for h5control ( <a href="../../h5control_device/README.txt">info</a> ).</li>
+	<li>Install and run h5control service on your computer ( <a href="../../h5control_service/README.txt">info</a> ).</li>
+	<li>Connect the Arduino to your computer through USB.</li>
 </ul>
 
 <p>&nbsp;</p>
 
 <h2>Make your first h5control app</h2>
 <p>Create a web page file contains HTML code as below, and copy file h5control.js to the same directory of your html file. <br>
-Open it in your web browser ( the latest version of Chrome, Firefox, Safari, Internet Explorer or Edge is recommended ).</p>
+Open it in your web browser ( Chrome is recommended ).</p>
 
 <pre>
 &lt;!DOCTYPE&#32;html&gt;<br>&lt;html&#32;xmlns="http://www.w3.org/1999/xhtml"&gt;<br>&lt;head&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&#32;src="h5control.js"&gt;&lt;/script&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&gt;
@@ -83,17 +79,12 @@ Open it in your web browser ( the latest version of Chrome, Firefox, Safari, Int
 </pre>
 
 <p>
-	Now, please follow all steps as below:
-</p>
-<ol>
-	<li>Run h5control Service program on your computer.</li>
-	<li>Connect your h5control-ready Arduino to your computer through USB.</li>
-	<li>Open the web page in your web browser.</li>
+	Now, please open the web page in your web browser.</li>
 </ol>
 <p>&nbsp;</p>
-<p>&nbsp;</p>
+<h2>Test Now !</h2>
 <p>
-Click buttons here for a live testing ......
+Actually, the javascript program explained above is already placed in the html code of this web page that you are reading, so just click buttons here for a live testing now ......
 </p>
 <p>
 	<input type="button" value="led on"

@@ -22,12 +22,13 @@
 <p>&nbsp;</p>
 
 <h2>Functions</h2>
-<p class="itemName">setup(host, <i><s>wsPort</s></i>, <i><s>httpPort</s></i>)</p>
+<p class="itemName">setup(<i><s>hostIp</s></i>, <i><s>wsPort</s></i>, <i><s>httpPort</s></i>)</p>
 <p class="itemDesc">
 	initialize the h5control environment, h5control.setup() must be called in every web app. <br/>
-	parameter <b>wsPort</b> is optional. The default web socket port used for the h5control system is 50000,
+	parameter <b>hostIp</b> is optional. The web app will work with the h5control service running on a specified host. Need set this parameter only if there is a h5control service running on a remote host, or else the default host ip is 127.0.0.1. <br/>
+	parameter <b>wsPort</b> is optional. The default web socket port used for the h5control service is 50000,
 	set this parameter if has a customized web socket port.<br/>
-	parameter <b>httpPort</b> is optional. the default http port used for the h5control system is 58000,
+	parameter <b>httpPort</b> is optional. the default http port used for the h5control service is 58000,
 	set this parameter if has a customized http port.<br/>
 	return value: none
 </p>
