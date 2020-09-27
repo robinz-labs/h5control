@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - 快速入门</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+</head>
+
+<body>
+
+<h1>h5Control - 快速入门</h1>
+
+<p>&nbsp;</p>
+<p>[ <a href="quick_start.html">English</a> ]</p>
+<p>h5control 提供了一种简单便捷的方式使你的 web 应用能够控制带有数字/模拟 IO、电机、舵机、LED灯光、传感器和各种电子部件的自制硬件。现在就让我们开始一步步动手使用 h5control 吧!</p>
+<p><img src="images/h5control.png" width="600" height="350" /></p>
+
+<p>&nbsp;</p>
+<h2>步骤 1 - 获得一块 Arduino 来为使用 h5control 做好准备</h2>
+<p>需要一块 Arduino MEGA 或 UNO 控制板。</p>
+<p><a href="http://robinz.org/labs/downloads/rioc-arduino.zip">下载</a> rioc-arduino 程序,
+在 Arduino IDE 中打开 RiocArduino.ino 程序， 并上传至 Arduino。</p>
+<p>为了能够实现远程重置 Arduino，还必须使用一根电线将 Arduino 板上的管脚 12 和管脚 RESET 联接在一起。</p>
+<p><img src="images/reset_wire.png" width="640" height="400" /></p>
+
+<p>&nbsp;</p>
+<h2>步骤 2 - 安装和运行 h5control 服务</h2>
+<p>Mac: <br><a href="http://robinz.org/labs/downloads/h5connect-mac.zip">下载</a> h5control Service for macOS,  
+将应用程序 h5control Service 复制到你的 Applications 文件夹中，并运行它。</p>
+<p>Windows: <br><a href="http://robinz.org/labs/downloads/h5connect-win.zip">下载</a> h5control Service for windows, 
+将 h5control Service 文件夹复制到你的电脑硬盘上，并运行此文件夹内的 h5connect.exe 或 h5connect-console.exe。</p>
+
+<p>现在，请将为 h5control 做好准备的 Arduino 控制板联接到你电脑上的 USB 端口，然后就能 <a href="set_unit_id.html" target="_blank">在 Web 浏览器中完成测试</a> ，你还可以在那里为你的 Arduino 设置 unit ID。</p>
+
+<p>&nbsp;</p>
+<h2>步骤 3 - 学习 h5control.js 编程</h2>
+
+<p>
+h5control 基础<br>
+<a target="_blank" href="../examples/1_1_getting_started.html">1.1 h5control 入门</a><br>
+<a target="_blank" href="../examples/1_2_web_inspector.html">1.2 使用 Web Inspector</a><br>
+</p>
+
+<p>
+通用 IO 控制<br>
+<a target="_blank" href="../examples/2_1_digital_out.html">2.1 数字输出 Digital Out</a><br>
+<a target="_blank" href="../examples/2_2_digital_in.html">2.2 数字输入 Digital In</a><br>
+<a target="_blank" href="../examples/2_3_analog_out.html">2.3 模拟输出 Analog Out</a><br>
+<a target="_blank" href="../examples/2_4_analog_in.html">2.4 模拟输入 Analog In</a><br>
+<a target="_blank" href="../examples/2_5_uart_serial.html">2.5 串口通信 UART Serial</a><br>
+</p>
+
+<p>
+运动控制<br>
+<a target="_blank" href="../examples/3_1_motor.html">3.1 电机 Motor</a><br>
+<a target="_blank" href="../examples/3_2_stepper.html">3.2 步进电机 Stepper</a><br>
+<a target="_blank" href="../examples/3_3_rudder_servo.html">3.3 舵机 Rudder Servo</a><br>
+</p>
+
+<p>
+传感器<br>
+<a target="_blank" href="../examples/4_1_encoder.html">4.1 编码器 Encoder</a><br>
+<a target="_blank" href="../examples/4_2_ultrasonic_ranger.html">4.2 超声波测距 Ultrasonic Ranger</a><br>
+<a target="_blank" href="../examples/4_3_thermometer.html">4.3 温度传感器 Thermometer</a><br>
+</p>
+
+<p>
+声音和灯光<br>
+<a target="_blank" href="../examples/5_1_tone_player.html">5.1 音调播放 Tone Player</a><br>
+<a target="_blank" href="../examples/5_2_led_strip.html">5.2 LED 灯条 LED Strip</a><br>
+</p>
+
+<p>
+红外通信<br>
+<a target="_blank" href="../examples/6_1_ir_receiver.html">6.1 红外接收 IR Receiver</a><br>
+<a target="_blank" href="../examples/6_2_ir_transmitter.html">6.2 红外发送 IR Transmitter</a><br>
+</p>
+
+<p>
+系统编程<br>
+<a target="_blank" href="../examples/7_1_system_objects.html">7.1 系统对象</a><br>
+<a target="_blank" href="../examples/7_2_raw_message.html">7.2 原始消息</a><br>
+</p>
+
+<p>&nbsp;</p>
+
+<p><img src="images/h5control_logo.png" width="128" height="128" /></p>
+<p>如需获得有关开发者的信息和这些项目的全部源码，请前往 
+<a target="_blank" href="http://robinz.org">robinz.org</a> 和 
+<a target="_blank" href="https://github.com/robinz-labs">github/robinz-labs</a> .<br>
+</p>
+
+</body>
+</html>
