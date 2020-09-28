@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>h5control - 入门</title>
+<link rel="stylesheet" type="text/css" href="css/h5control_test.css">
+<script type="text/javascript" src="../h5control.js"></script>
+<script type="text/javascript">
+
+	var led = new DigitalOut();
+
+	window.onload = function() {
+		h5control.setup();
+	};
+
+	h5control.whenConnect = function() {
+		h5control.resetAll();
+	};
+
+	h5control.whenDisconnect = function() {
+		document.getElementById("status").innerHTML = "system connection lost";
+	};
+
+	h5control.whenUnitReady = function(unitId) {
+		led.setup(unitId, 13);
+		document.getElementById("status").innerHTML = "system ready";
+	};
+
+	led.whenGetValue = function(value) {
+		alert("LED is " + (value ? "ON" : "OFF"));
+	};
+
+	led.whenSetValue = function(value) {
+		document.getElementById("status").innerHTML = "LED is set to " + (value ? "ON" : "OFF");
+	};
+
+</script>
+</head>
+
+<body>
+<h1>h5control 入门</h1>
+
+<div id="status">starting...</div>
+
+<p>&nbsp;</p>
+
+<h2>h5control 是什么 ?</h2>
+
+<p>h5control 提供了一种简单便捷的方式使你的 web 应用能够控制带有数字/模拟 IO、电机、舵机、LED灯光、传感器和各种电子部件的自制硬件。</p>
+<ul>
+	<li>采用了流行的开源硬件 Arduino 。</li>
+	<li>仅仅需要使用 HTML5/JavaScript 进行简单快速的编程就能完成所有的开发工作。</li>
+	<li>与普通的 Web App 开发完全一样，可以使用 Web Inspector 来进行方便的在线调试。</li>
+	<li>你的 Web App 可以采用 USB 或是 Bluetooth 方式来连接你的硬件。</li>
+</ul>
+<p><img src="images/h5control.png" width="600" height="350" /></p>
+
+<p>&nbsp;</p>
+
+<h2>在你开始编程前</h2>
+<ul>
+	<li>准备一块支持 h5control 的 Arduino 控制板 ( <a href="../../h5control_device/README.txt">info</a> )。</li>
+	<li>在你的电脑上安装和运行 h5control 服务 ( <a href="../../h5control_service/README.txt">info</a> )。</li>
+	<li>通过 USB, 联接 Arduino 到你的电脑上。</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2>制作你的第一个 h5control 应用</h2>
+<p>创建一个包含有如下 html 代码的网页文件, 并复制 h5control.js 文件到你的 html 文件所在目录内。 <br>
+在 web 浏览器中打开该网页文件 ( 推荐使用 Chrome 浏览器 )。</p>
+
+<pre>
+&lt;!DOCTYPE&#32;html&gt;<br>&lt;html&#32;xmlns="http://www.w3.org/1999/xhtml"&gt;<br>&lt;head&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&#32;src="h5control.js"&gt;&lt;/script&gt;<br>&#32;&#32;&#32;&lt;script&#32;type="text/javascript"&gt;
+<br>&#32;&#32;&#32;&#32;&#32;&#32;var&#32;led&#32;=&#32;new&#32;DigitalOut();
+<br>&#32;&#32;&#32;&#32;&#32;&#32;window.onload&#32;=&#32;function()&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h5control.setup();<br>&#32;&#32;&#32;&#32;&#32;&#32;};
+<br>&#32;&#32;&#32;&#32;&#32;&#32;h5control.whenConnect&#32;=&#32;function()&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;h5control.resetAll();<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br><br>&#32;&#32;&#32;&#32;&#32;&#32;h5control.whenUnitReady&#32;=&#32;function(unitId)&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;led.setup(unitId,&#32;13);<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br><br>&#32;&#32;&#32;&#32;&#32;&#32;led.whenGetValue&#32;=&#32;function(value)&#32;{<br>&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;&#32;alert("LED&#32;is&#32;"&#32;+&#32;(value&#32;?&#32;"ON"&#32;:&#32;"OFF"));<br>&#32;&#32;&#32;&#32;&#32;&#32;};<br>&#32;&#32;&#32;&lt;/script&gt;<br>&lt;/head&gt;<br><br>&lt;body&gt;<br>&lt;p&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;on" onclick="led.setValue(1);"&#32;/&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;off" onclick="led.setValue(0);"&#32;/&gt;<br>&#32;&#32;&#32;&lt;input&#32;type="button"&#32;value="led&#32;state&#32;?" onclick="led.getValue();"&#32;/&gt;<br>&lt;/p&gt;<br>&lt;/body&gt;<br>&lt;/html&gt;
+
+</pre>
+
+<p>
+	现在, 请在浏览器中打开此网页。</li>
+</ol>
+<p>&nbsp;</p>
+<h2>现在就来测试吧 !</h2>
+<p>
+事实上, 以上说明中的 javascript 程序已经被放置在你正在阅读的本网页中, 所以你只需要点击此处按钮就能立即进行真机测试 ......
+</p>
+<p>
+	<input type="button" value="点亮 LED"
+		   onclick="led.setValue(1);" />
+	<input type="button" value="熄灭 LED"
+		   onclick="led.setValue(0);" />
+	<input type="button" value="LED 状态 ?"
+		   onclick="led.getValue();" />
+</p>
+
+<p>&nbsp;</p>
+
+</body>
+</html>
