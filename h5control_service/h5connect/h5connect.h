@@ -1,7 +1,7 @@
 #ifndef H5CONNECT_H
 #define H5CONNECT_H
 
-#define H5CONNECT_VERSION   "0.3"
+#define H5CONNECT_VERSION   "0.3.1"
 
 #include <QObject>
 #include <QJsonObject>

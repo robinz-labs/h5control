@@ -143,7 +143,7 @@ void HttpSocket::processHttpRequest()
 
 void HttpSocket::transferFile(QDataStream & out, const QString & strFilePath, const QString & strFileType)
 {
-    QString strHttpHead = "HTTP/1.0 200 Ok\r\nContent-Type: " + strFileType + "\r\n\r\n";
+    QString strHttpHead = "HTTP/1.0 200 Ok\r\nContent-Type: " + strFileType + "\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
     const char* szHttpHead = strHttpHead.toUtf8().constData();
     out.writeRawData(szHttpHead, strlen(szHttpHead));
 
@@ -166,7 +166,7 @@ void HttpSocket::outputHttpHead(QDataStream & out, const QString & strFileType)
     QString strHttpHead =
             "HTTP/1.0 200 Ok\r\nContent-Type: " +
             (strFileType.isNull() ? "text/html" : strFileType) +
-            "; charset=\"utf-8\"\r\n\r\n";
+            "; charset=\"utf-8\"\r\nAccess-Control-Allow-Origin: *\r\n\r\n";
     const char* szHttpHead = strHttpHead.toUtf8().constData();
     out.writeRawData(szHttpHead, strlen(szHttpHead));
 }

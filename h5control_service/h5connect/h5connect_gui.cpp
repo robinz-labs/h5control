@@ -88,7 +88,7 @@ void H5ConnectGUI::showAbout()
     msgbox.setWindowTitle(tr("About"));
     msgbox.setText(QString(tr("\r\nh5control Service\r\nVersion %1\r\n"))
                    .arg(H5CONNECT_VERSION));
-    msgbox.setInformativeText(QString(tr("HTTP Service: %1\r\nHTTP Port: %2\r\n\r\nWeb Socket Service: %3\r\nWeb Socket Port: %4\r\n\r\nh5control.com\r\n[c] 2016 Robin Zhang\r\n"))
+    msgbox.setInformativeText(QString(tr("HTTP Service: %1\r\nHTTP Port: %2\r\n\r\nWeb Socket Service: %3\r\nWeb Socket Port: %4\r\n\r\nh5control.com\r\n(c) 2016-2020 Robin Zhang & Labs\r\n"))
                    .arg(g_h5connect->httpIsReady() ? "Ready" : "Error")
                    .arg(httpPort)
                    .arg(g_h5connect->websocketIsReady() ? "Ready" : "Error")
